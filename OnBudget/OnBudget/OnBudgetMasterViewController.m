@@ -2,7 +2,7 @@
 //  OnBudgetMasterViewController.m
 //  OnBudget
 //
-//  Created by KEVIN SCHIROO on 2/12/13.
+//  Created by KEVIN SCHIROO on 2/13/13.
 //  Copyright (c) 2013 KEVIN SCHIROO. All rights reserved.
 //
 
@@ -27,9 +27,11 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
-
+    
+    /*
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
     self.navigationItem.rightBarButtonItem = addButton;
+     */
 }
 
 - (void)didReceiveMemoryWarning
@@ -38,6 +40,7 @@
     // Dispose of any resources that can be recreated.
 }
 
+/*
 - (void)insertNewObject:(id)sender
 {
     if (!_objects) {
@@ -47,8 +50,10 @@
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
+ */
 
 #pragma mark - Table View
+
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -62,7 +67,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ItemCell" forIndexPath:indexPath];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
 
     NSDate *object = _objects[indexPath.row];
     cell.textLabel.text = [object description];
