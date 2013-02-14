@@ -9,6 +9,8 @@
 #import "AddItemViewController.h"
 
 @interface AddItemViewController ()
+@property (weak, nonatomic) IBOutlet UITextField *itemQuantityInputString;
+@property (weak, nonatomic) IBOutlet UITextField *itemCostInputString;
 
 @end
 
@@ -43,11 +45,39 @@
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     NSLog(@"Text Field Should Return");
-    if((textField == self.itemNameInput)|| textField == self.itemCostInput)
+    if((textField == self.itemNameInput)|| textField == self.itemCostInputString)
     {
         [textField resignFirstResponder];
     }
+    
     return YES;
+}
+
+//Method drawn largly from
+//http://stackoverflow.com/questions/8076160/limiting-text-field-entry-to-only-one-decimal-point
+-(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+    NSLog(@"should change characters in range");
+    if(textField == self.itemCostInputString || textField == self.itemQuantityInputString)
+    {
+        NSLog(@"In If");
+        NSString *newString = [textField.text stringByReplacingCharactersInRange:range withString:string];
+    
+        NSArray *sep = [newString componentsSeparatedByString:@"."];
+        if([sep count] <=2)
+        {
+            if([sep count] ==2)
+            {
+                return [sep[1] length]<=2;
+            }
+            return YES;
+        }
+        else
+        {
+            return NO;
+        }
+    }
+    return YES;
+    
 }
 
 #pragma mark - Table view data source

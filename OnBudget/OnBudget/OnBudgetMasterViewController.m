@@ -10,6 +10,8 @@
 
 #import "OnBudgetDetailViewController.h"
 
+#import "AddItemViewController.h"
+
 @interface OnBudgetMasterViewController () {
     NSMutableArray *_objects;
 }
@@ -34,10 +36,47 @@
      */
 }
 
+- (IBAction)done:(UIStoryboardSegue *)segue
+{
+    if([[segue identifier] isEqualToString:@"ReturnInput"])
+    {
+        AddItemViewController *addController = [segue sourceViewController];
+        if(![addController.itemNameInput.text isEqualToString:@""])
+        {
+            NSLog(@"Into done if structure");
+            NSMutableDictionary *item = [[NSMutableDictionary alloc] initWithObjectsAndKeys:addController.itemNameInput.text, @"name",
+                                 addController.itemQuantityInput, @"quantity", addController.itemCostInput,
+                                 @"cost",addController.itemTaxedInput.state,@"tax", nil];
+            [self insertNewItem:item];
+            [self.tableView reloadData];
+        }
+        [self dismissViewControllerAnimated:YES completion:NULL];
+    }
+}
+
+- (IBAction)cancel:(UIStoryboardSegue *)segue
+{
+    if([[segue identifier] isEqualToString:@"CancelInput"])
+    {
+        [self dismissViewControllerAnimated:YES completion:NULL];
+    }
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)insertNewItem:(NSMutableDictionary *)item
+{
+    if(!_objects)
+    {
+        _objects = [[NSMutableArray alloc] init];
+    }
+    [_objects insertObject:item atIndex:[_objects count]];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_objects count]-1 inSection:0];
+    [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 /*
@@ -67,10 +106,11 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ItemCell" forIndexPath:indexPath];
 
-    NSDate *object = _objects[indexPath.row];
-    cell.textLabel.text = [object description];
+    NSMutableDictionary *item = _objects[indexPath.row];
+    cell.textLabel.text = [item objectForKey:@"name"];
+    //cell.detailTextLabel.text = [item objectForKey:@"cost"]*[item objectForKey:@"quantity"];
     return cell;
 }
 

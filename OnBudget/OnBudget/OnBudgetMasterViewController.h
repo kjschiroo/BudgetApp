@@ -9,5 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface OnBudgetMasterViewController : UITableViewController
+- (IBAction)done:(UIStoryboardSegue *)segue;
+- (IBAction)cancel:(UIStoryboardSegue *)segue;
 
 @end

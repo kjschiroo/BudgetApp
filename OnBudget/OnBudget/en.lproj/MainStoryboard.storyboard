@@ -68,6 +68,7 @@
                     </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="17" sceneMemberID="firstResponder"/>
+                <exit id="8OB-37-VXf" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="459" y="64"/>
         </scene>
@@ -127,7 +128,7 @@
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="97" type="user" id="dmH-D9-3vm"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" autocapitalizationType="words" keyboardType="numbersAndPunctuation" returnKeyType="done"/>
+                                                    <textInputTraits key="textInputTraits" autocapitalizationType="words" keyboardType="decimalPad" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
                                                     <connections>
                                                         <outlet property="delegate" destination="4e9-IU-n8Z" id="c2C-Z9-zx8"/>
                                                     </connections>
@@ -148,8 +149,41 @@
                                             <constraint firstItem="zWl-Kv-BN7" firstAttribute="leading" secondItem="zmf-VN-l9h" secondAttribute="trailing" constant="8" symbolic="YES" type="user" id="mJR-xE-wRz"/>
                                         </constraints>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="dv6-Ej-BvH">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="tJy-Aw-jlA">
                                         <rect key="frame" x="0.0" y="88" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="hTd-eD-NbI">
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="97" type="user" id="HHK-BS-ID2"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits" autocapitalizationType="words" keyboardType="decimalPad" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
+                                                    <connections>
+                                                        <outlet property="delegate" destination="4e9-IU-n8Z" id="b6v-QY-sSt"/>
+                                                    </connections>
+                                                </textField>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="999" text="Quantity" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lZG-I2-avs">
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                        <constraints>
+                                            <constraint firstItem="lZG-I2-avs" firstAttribute="leading" secondItem="tJy-Aw-jlA" secondAttribute="leading" constant="20" type="user" id="1xD-TV-OEK"/>
+                                            <constraint firstItem="hTd-eD-NbI" firstAttribute="leading" secondItem="lZG-I2-avs" secondAttribute="trailing" constant="8" symbolic="YES" type="user" id="eQF-PI-34Y"/>
+                                            <constraint firstItem="lZG-I2-avs" firstAttribute="top" secondItem="tJy-Aw-jlA" secondAttribute="top" constant="11" id="iRh-fM-jnx"/>
+                                            <constraint firstItem="hTd-eD-NbI" firstAttribute="centerY" secondItem="tJy-Aw-jlA" secondAttribute="centerY" type="default" id="sw3-jQ-IhQ"/>
+                                            <constraint firstAttribute="trailing" secondItem="hTd-eD-NbI" secondAttribute="trailing" constant="20" type="user" id="xrj-Dp-9c9"/>
+                                        </constraints>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="dv6-Ej-BvH">
+                                        <rect key="frame" x="0.0" y="132" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -183,12 +217,21 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="bRR-In-Ako">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="MSO-7t-Jfl"/>
-                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="bBb-ZA-We7"/>
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="MSO-7t-Jfl">
+                            <connections>
+                                <segue destination="8OB-37-VXf" kind="unwind" identifier="CancelInput" unwindAction="cancel:" id="dNk-pq-N0M"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="bBb-ZA-We7">
+                            <connections>
+                                <segue destination="8OB-37-VXf" kind="unwind" identifier="ReturnInput" unwindAction="done:" id="hpp-h4-CoV"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="itemCostInput" destination="zWl-Kv-BN7" id="Wll-Ut-iXN"/>
+                        <outlet property="itemCostInputString" destination="zWl-Kv-BN7" id="XnD-IT-cGs"/>
                         <outlet property="itemNameInput" destination="oUc-wB-7JE" id="vSZ-nh-gY9"/>
+                        <outlet property="itemQuantityInputString" destination="hTd-eD-NbI" id="LiS-Ur-hXx"/>
                         <outlet property="itemTaxedInput" destination="TQM-X7-tBZ" id="ezH-9a-bR1"/>
                     </connections>
                 </tableViewController>
@@ -215,22 +258,6 @@
             <point key="canvasLocation" x="857" y="63"/>
         </scene>
     </scenes>
-    <classes>
-        <class className="AddItemViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/AddItemViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="itemCostInput" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="itemNameInput" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="itemTaxedInput" candidateClass="UISwitch"/>
-            </relationships>
-        </class>
-        <class className="NSLayoutConstraint" superclassName="NSObject">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
-        </class>
-        <class className="OnBudgetMasterViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/OnBudgetMasterViewController.h"/>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
