@@ -80,6 +80,18 @@
     
 }
 
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if([[segue identifier] isEqualToString:@"ReturnInput"])
+    {
+        NSLog(@"Preparing for Segue");
+        NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
+        [f setNumberStyle:NSNumberFormatterDecimalStyle];
+        self.itemQuantityInput = [ f numberFromString:self.itemQuantityInputString.text];
+        self.itemCostInput = [ f numberFromString:self.itemCostInputString.text];
+    }
+}
+
 #pragma mark - Table view data source
 /*
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
