@@ -282,7 +282,7 @@
                         <outlet property="itemCostInputString" destination="zWl-Kv-BN7" id="XnD-IT-cGs"/>
                         <outlet property="itemNameInput" destination="oUc-wB-7JE" id="vSZ-nh-gY9"/>
                         <outlet property="itemQuantityInputString" destination="hTd-eD-NbI" id="LiS-Ur-hXx"/>
-                        <outlet property="itemTaxedInput" destination="TQM-X7-tBZ" id="ezH-9a-bR1"/>
+                        <outlet property="itemTaxedInputSwitch" destination="TQM-X7-tBZ" id="D9n-6K-opJ"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Prm-Ru-lXc" userLabel="First Responder" sceneMemberID="firstResponder"/>

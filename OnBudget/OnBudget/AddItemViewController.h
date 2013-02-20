@@ -11,7 +11,7 @@
 @interface AddItemViewController : UITableViewController <UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *itemNameInput;
 @property (weak, nonatomic) NSNumber *itemCostInput;
-@property (weak, nonatomic) IBOutlet UISwitch *itemTaxedInput;
 @property (weak, nonatomic) NSNumber *itemQuantityInput;
+@property (weak, nonatomic) NSNumber *itemTaxedInput;
 
 @end

@@ -16,6 +16,7 @@
     NSMutableArray *_objects;
     bool displayTotal;
     NSNumber *_budget;
+    NSNumber *_taxRate;
     
 }
 @end
@@ -33,6 +34,7 @@
 	// Do any additional setup after loading the view, typically from a nib.
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
     _budget =[[NSNumber alloc] initWithFloat:50.00];
+    _taxRate = [[NSNumber alloc] initWithFloat:0.065];
     displayTotal = NO;
     
     /*
@@ -50,7 +52,7 @@
         {
             NSMutableDictionary *item = [[NSMutableDictionary alloc] initWithObjectsAndKeys:addController.itemNameInput.text, @"name",
                                  addController.itemQuantityInput, @"quantity", addController.itemCostInput,
-                                 @"cost",addController.itemTaxedInput.state,@"tax", nil];
+                                 @"cost",addController.itemTaxedInput,@"taxed", nil];
             [self insertNewItem:item];
             [self.tableView reloadData];
         }
@@ -94,7 +96,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _objects.count + 2;
+    return [self rowForTotal]+1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -102,11 +104,14 @@
     UITableViewCell *cell;
     NSNumber *cost;
     NSNumber *quantity;
+    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+    [formatter setNumberStyle:NSNumberFormatterCurrencyStyle];
     if(indexPath.row == 0)
     {
         cell = [tableView dequeueReusableCellWithIdentifier:@"BudgetCell" forIndexPath:indexPath];
         cell.textLabel.text = @"Budget";
-        cell.detailTextLabel.text = [NSString stringWithFormat:@"%.02f", _budget.floatValue];
+        cell.detailTextLabel.text = [formatter stringFromNumber:_budget];
+        //cell.detailTextLabel.text = [NSString stringWithFormat:@"%.02f", _budget.floatValue];
     }
     else if(indexPath.row == [self rowForTotal])
     {
@@ -117,19 +122,35 @@
             quantity = [item objectForKey:@"quantity"];
             total += [cost doubleValue]*[quantity doubleValue];
         }
+        total += [self getTax];
        
+        
         if(displayTotal)
         {
             cell.textLabel.text = @"Total";
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"%.02f", total];
+            cell.detailTextLabel.text = [formatter stringFromNumber:[NSNumber numberWithDouble:total]];
+            
+            //cell.detailTextLabel.text = [NSString stringWithFormat:@"%.02f", total];
         }
         else
         {
             cell.textLabel.text = @"Balance";
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"%.02f", _budget.floatValue - total];
+            cell.detailTextLabel.text = [formatter stringFromNumber:[NSNumber numberWithDouble:(_budget.floatValue -total)]];
+            if(total > [_budget doubleValue])
+            {
+                cell.detailTextLabel.textColor = [UIColor redColor];
+            }
+            //cell.detailTextLabel.text = [NSString stringWithFormat:@"%.02f", _budget.floatValue - total];
         }
         
 
+    }
+    else if(indexPath.row == [self rowForTax])
+    {
+        cell = [tableView dequeueReusableCellWithIdentifier:@"TotalCell" forIndexPath:indexPath];
+        cell.textLabel.text = @"Tax";
+        cell.detailTextLabel.text = [formatter stringFromNumber:[NSNumber numberWithDouble:[self getTax]]];
+        //cell.detailTextLabel.text = [NSString stringWithFormat:@"%.02f",[self getTax] ];
     }
     else
     {
@@ -139,7 +160,8 @@
         quantity = [item objectForKey:@"quantity"];
         cell.textLabel.text = [item objectForKey:@"name"];
         if (quantity != 0) {
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"%.02f",[cost doubleValue]*[quantity doubleValue] ];
+            cell.detailTextLabel.text = [formatter stringFromNumber:[NSNumber numberWithDouble:([cost doubleValue]*[quantity doubleValue])]];
+            //cell.detailTextLabel.text = [NSString stringWithFormat:@"%.02f",[cost doubleValue]*[quantity doubleValue] ];
         }
         else
         {
@@ -152,7 +174,7 @@
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Return NO if you do not want the specified item to be editable.
-    if(indexPath.row == [_objects count]+1 || indexPath.row == 0)
+    if(indexPath.row == [self rowForTotal]|| indexPath.row == [self rowForTax] || indexPath.row == 0)
     {
         return NO;
     }
@@ -168,7 +190,8 @@
         [_objects removeObjectAtIndex:[self objectIndexForPath:indexPath]];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
         NSIndexPath *totalPath = [NSIndexPath indexPathForRow:[self rowForTotal] inSection:0];
-        [tableView reloadRowsAtIndexPaths:@[totalPath] withRowAnimation:UITableViewRowAnimationFade];
+        NSIndexPath *taxPath = [NSIndexPath indexPathForRow:[self rowForTax] inSection:0];
+        [tableView reloadRowsAtIndexPaths:@[totalPath,taxPath] withRowAnimation:UITableViewRowAnimationFade];
     } else if (editingStyle == UITableViewCellEditingStyleInsert) {
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
     }
@@ -201,9 +224,14 @@
     }
 }
 
+- (int)rowForTax
+{
+    return [self rowForTotal] - 1;
+}
+
 - (int)rowForTotal
 {
-    return [_objects count] +  1;
+    return [_objects count] +  2;
 }
 
 - (int)objectIndexForPath:(NSIndexPath *)myPath
@@ -218,6 +246,23 @@
         displayTotal = !displayTotal;
         [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     }
+}
+- (double)getTax
+{
+    double total = 0;
+    double cost;
+    double quantity;
+    bool taxed;
+    for (NSMutableDictionary *item in _objects) {
+        taxed = [[item objectForKey:@"taxed"] boolValue];
+        if(taxed)
+        {
+            cost = [[item objectForKey:@"cost"] doubleValue];
+            quantity = [[item objectForKey:@"quantity"] doubleValue];
+            total += cost*quantity*[_taxRate doubleValue];
+        }
+    }
+    return total;
 }
 
 @end

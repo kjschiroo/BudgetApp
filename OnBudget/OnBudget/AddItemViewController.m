@@ -11,6 +11,7 @@
 @interface AddItemViewController ()
 @property (weak, nonatomic) IBOutlet UITextField *itemQuantityInputString;
 @property (weak, nonatomic) IBOutlet UITextField *itemCostInputString;
+@property (weak, nonatomic) IBOutlet UISwitch *itemTaxedInputSwitch;
 
 @end
 
@@ -84,11 +85,11 @@
 {
     if([[segue identifier] isEqualToString:@"ReturnInput"])
     {
-        NSLog(@"Preparing for Segue");
         NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
         [f setNumberStyle:NSNumberFormatterDecimalStyle];
         self.itemQuantityInput = [ f numberFromString:self.itemQuantityInputString.text];
         self.itemCostInput = [ f numberFromString:self.itemCostInputString.text];
+        self.itemTaxedInput = [ NSNumber numberWithBool:[self.itemTaxedInputSwitch isOn]];
     }
 }
 
