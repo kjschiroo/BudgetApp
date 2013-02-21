@@ -51,6 +51,9 @@
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <segue destination="utZ-vK-3wb" kind="modal" identifier="SetBudget" modalTransitionStyle="flipHorizontal" id="pbZ-Za-z5r"/>
+                                </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ItemCell" textLabel="0RD-cC-6Vz" detailTextLabel="tLW-Ub-OfD" style="IBUITableViewCellStyleValue1" id="bbA-BK-0XA">
                                 <rect key="frame" x="0.0" y="66" width="320" height="44"/>
@@ -77,8 +80,29 @@
                                 </view>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </tableViewCell>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TotalCell" textLabel="Ub7-jE-zek" detailTextLabel="c4t-9N-xJy" style="IBUITableViewCellStyleValue2" id="QRY-VF-gsm">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" indentationWidth="10" reuseIdentifier="TaxCell" textLabel="DIw-yB-wQG" detailTextLabel="Azk-Ks-Xa1" style="IBUITableViewCellStyleValue2" id="Mfg-qc-iWG">
                                 <rect key="frame" x="0.0" y="110" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DIw-yB-wQG">
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
+                                            <color key="textColor" red="0.32156862745098042" green="0.40000000000000002" blue="0.56862745098039214" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </label>
+                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Detail" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Azk-Ks-Xa1">
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                            </tableViewCell>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TotalCell" textLabel="Ub7-jE-zek" detailTextLabel="c4t-9N-xJy" style="IBUITableViewCellStyleValue2" id="QRY-VF-gsm">
+                                <rect key="frame" x="0.0" y="154" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -122,7 +146,7 @@
             </objects>
             <point key="canvasLocation" x="459" y="64"/>
         </scene>
-        <!--Add Item View Controller-->
+        <!--Add Item View Controller - Add Item-->
         <scene sceneID="Ytu-7G-n3O">
             <objects>
                 <tableViewController id="4e9-IU-n8Z" customClass="AddItemViewController" sceneMemberID="viewController">
@@ -266,7 +290,7 @@
                             <outlet property="delegate" destination="4e9-IU-n8Z" id="5aA-fg-rNE"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="bRR-In-Ako">
+                    <navigationItem key="navigationItem" title="Add Item" id="bRR-In-Ako">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="MSO-7t-Jfl">
                             <connections>
                                 <segue destination="8OB-37-VXf" kind="unwind" identifier="CancelInput" unwindAction="cancel:" id="dNk-pq-N0M"/>
@@ -287,7 +311,79 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Prm-Ru-lXc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1383" y="63"/>
+            <point key="canvasLocation" x="1525" y="477"/>
+        </scene>
+        <!--Edit Budget View Controller - Set Budget-->
+        <scene sceneID="deG-7w-3wi">
+            <objects>
+                <tableViewController id="Q3K-VO-GXc" customClass="EditBudgetViewController" sceneMemberID="viewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="fBV-tR-p5S">
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <sections>
+                            <tableViewSection id="c1H-aD-Bfi">
+                                <cells>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="eDS-tm-gD7">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="999" text="Budget" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iFE-wd-nsC">
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="70" id="qgS-sF-m52"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </label>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="OjY-ym-og7">
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="97" type="user" id="8VH-FS-WK7"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
+                                                </textField>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                        <constraints>
+                                            <constraint firstItem="OjY-ym-og7" firstAttribute="top" secondItem="eDS-tm-gD7" secondAttribute="top" constant="8" id="R8M-A7-fm2"/>
+                                            <constraint firstItem="OjY-ym-og7" firstAttribute="baseline" secondItem="iFE-wd-nsC" secondAttribute="baseline" type="default" id="e7K-UW-KvO"/>
+                                            <constraint firstAttribute="trailing" secondItem="OjY-ym-og7" secondAttribute="trailing" constant="20" type="user" id="fJv-nc-51v"/>
+                                            <constraint firstItem="OjY-ym-og7" firstAttribute="leading" secondItem="iFE-wd-nsC" secondAttribute="trailing" constant="8" symbolic="YES" type="user" id="fmG-pS-44A"/>
+                                            <constraint firstItem="iFE-wd-nsC" firstAttribute="leading" secondItem="eDS-tm-gD7" secondAttribute="leading" constant="20" type="user" id="kEz-Ya-cLg"/>
+                                        </constraints>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="Q3K-VO-GXc" id="Gjq-2T-Zv3"/>
+                            <outlet property="delegate" destination="Q3K-VO-GXc" id="Afq-w1-Lk4"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Set Budget" id="Pcb-Ko-rZ5">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="0u7-l2-xTB">
+                            <connections>
+                                <segue destination="8OB-37-VXf" kind="unwind" identifier="CancelBudget" unwindAction="cancel:" id="UXN-9s-Paf"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="7rS-nL-3Ge">
+                            <connections>
+                                <segue destination="8OB-37-VXf" kind="unwind" identifier="ReturnBudget" unwindAction="done:" id="0aD-E7-faI"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="BudgetInput" destination="OjY-ym-og7" id="xfQ-NU-MFz"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="MNg-wv-BUA" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1530" y="-213"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="bU7-Si-rTO">
@@ -305,7 +401,25 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="h5v-NK-MsU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="857" y="63"/>
+            <point key="canvasLocation" x="999" y="477"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="KfF-2g-KjN">
+            <objects>
+                <navigationController id="utZ-vK-3wb" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="1AG-Ix-ltX">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="Q3K-VO-GXc" kind="relationship" relationship="rootViewController" id="MtW-Vx-gsV"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bGJ-TI-ptq" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1004" y="-213"/>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

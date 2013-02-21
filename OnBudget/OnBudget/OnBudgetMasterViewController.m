@@ -12,6 +12,8 @@
 
 #import "AddItemViewController.h"
 
+#import "EditBudgetViewController.h"
+
 @interface OnBudgetMasterViewController () {
     NSMutableArray *_objects;
     bool displayTotal;
@@ -33,7 +35,7 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
-    _budget =[[NSNumber alloc] initWithFloat:50.00];
+    _budget =[[NSNumber alloc] initWithFloat:0.00];
     _taxRate = [[NSNumber alloc] initWithFloat:0.065];
     displayTotal = NO;
     
@@ -56,6 +58,13 @@
             [self insertNewItem:item];
             [self.tableView reloadData];
         }
+        [self dismissViewControllerAnimated:YES completion:NULL];
+    }
+    else if ([[segue identifier] isEqualToString:@"ReturnBudget"])
+    {
+        EditBudgetViewController *budgetController = [segue sourceViewController];
+        _budget = budgetController.budget;
+        [self.tableView reloadData];
         [self dismissViewControllerAnimated:YES completion:NULL];
     }
 }
@@ -129,16 +138,21 @@
         {
             cell.textLabel.text = @"Total";
             cell.detailTextLabel.text = [formatter stringFromNumber:[NSNumber numberWithDouble:total]];
+            cell.detailTextLabel.textColor = [UIColor blackColor];
             
             //cell.detailTextLabel.text = [NSString stringWithFormat:@"%.02f", total];
         }
         else
         {
             cell.textLabel.text = @"Balance";
-            cell.detailTextLabel.text = [formatter stringFromNumber:[NSNumber numberWithDouble:(_budget.floatValue -total)]];
+            cell.detailTextLabel.text = [formatter stringFromNumber:[NSNumber numberWithDouble:([_budget doubleValue] -total)]];
             if(total > [_budget doubleValue])
             {
                 cell.detailTextLabel.textColor = [UIColor redColor];
+            }
+            else
+            {
+                cell.detailTextLabel.textColor = [UIColor blackColor];
             }
             //cell.detailTextLabel.text = [NSString stringWithFormat:@"%.02f", _budget.floatValue - total];
         }
@@ -147,7 +161,7 @@
     }
     else if(indexPath.row == [self rowForTax])
     {
-        cell = [tableView dequeueReusableCellWithIdentifier:@"TotalCell" forIndexPath:indexPath];
+        cell = [tableView dequeueReusableCellWithIdentifier:@"TaxCell" forIndexPath:indexPath];
         cell.textLabel.text = @"Tax";
         cell.detailTextLabel.text = [formatter stringFromNumber:[NSNumber numberWithDouble:[self getTax]]];
         //cell.detailTextLabel.text = [NSString stringWithFormat:@"%.02f",[self getTax] ];
@@ -191,7 +205,8 @@
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
         NSIndexPath *totalPath = [NSIndexPath indexPathForRow:[self rowForTotal] inSection:0];
         NSIndexPath *taxPath = [NSIndexPath indexPathForRow:[self rowForTax] inSection:0];
-        [tableView reloadRowsAtIndexPaths:@[totalPath,taxPath] withRowAnimation:UITableViewRowAnimationFade];
+        [tableView reloadRowsAtIndexPaths:@[taxPath] withRowAnimation:UITableViewRowAnimationFade];
+        [tableView reloadRowsAtIndexPaths:@[totalPath] withRowAnimation:UITableViewRowAnimationFade];    
     } else if (editingStyle == UITableViewCellEditingStyleInsert) {
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
     }
