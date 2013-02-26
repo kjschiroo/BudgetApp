@@ -90,9 +90,9 @@
         _objects = [[NSMutableArray alloc] init];
     }
     [_objects insertObject:item atIndex:[_objects count]];
-    //insert at object count+1 not count since "Budget" takes 1 spot
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_objects count] inSection:0];
-    [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    //NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_objects count]-1 inSection:0];
+    [self.tableView reloadData];
+    //[self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 #pragma mark - Table View
@@ -115,14 +115,15 @@
     NSNumber *quantity;
     NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     [formatter setNumberStyle:NSNumberFormatterCurrencyStyle];
-    if(indexPath.row == 0)
+    /*if(indexPath.row == 0)
     {
         cell = [tableView dequeueReusableCellWithIdentifier:@"BudgetCell" forIndexPath:indexPath];
         cell.textLabel.text = @"Budget";
         cell.detailTextLabel.text = [formatter stringFromNumber:_budget];
         //cell.detailTextLabel.text = [NSString stringWithFormat:@"%.02f", _budget.floatValue];
     }
-    else if(indexPath.row == [self rowForTotal])
+    else*/
+    if(indexPath.row == [self rowForTotal])
     {
         cell = [tableView dequeueReusableCellWithIdentifier:@"TotalCell" forIndexPath:indexPath];
         double total = 0;
@@ -169,7 +170,7 @@
     else
     {
         cell = [tableView dequeueReusableCellWithIdentifier:@"ItemCell" forIndexPath:indexPath];
-        NSMutableDictionary *item = _objects[indexPath.row - 1];
+        NSMutableDictionary *item = _objects[indexPath.row];
         cost = [item objectForKey:@"cost"];
         quantity = [item objectForKey:@"quantity"];
         cell.textLabel.text = [item objectForKey:@"name"];
@@ -188,7 +189,7 @@
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Return NO if you do not want the specified item to be editable.
-    if(indexPath.row == [self rowForTotal]|| indexPath.row == [self rowForTax] || indexPath.row == 0)
+    if(indexPath.row == [self rowForTotal]|| indexPath.row == [self rowForTax])
     {
         return NO;
     }
@@ -201,12 +202,30 @@
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        [_objects removeObjectAtIndex:[self objectIndexForPath:indexPath]];
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        if([self getTax] !=0)
+        {
+            NSIndexPath *taxPath = [NSIndexPath indexPathForRow:[self rowForTax] inSection:0];
+            [_objects removeObjectAtIndex:[self objectIndexForPath:indexPath]];
+            if([self getTax] == 0)
+            {
+                [tableView deleteRowsAtIndexPaths:@[indexPath, taxPath] withRowAnimation:UITableViewRowAnimationFade];
+            }
+            else
+            {
+                [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                taxPath = [NSIndexPath indexPathForRow:[self rowForTax] inSection:0];
+                [tableView reloadRowsAtIndexPaths:@[taxPath] withRowAnimation:UITableViewRowAnimationFade];
+            }
+        }
+        else
+        {
+            [_objects removeObjectAtIndex:[self objectIndexForPath:indexPath]];
+            [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        }
         NSIndexPath *totalPath = [NSIndexPath indexPathForRow:[self rowForTotal] inSection:0];
-        NSIndexPath *taxPath = [NSIndexPath indexPathForRow:[self rowForTax] inSection:0];
-        [tableView reloadRowsAtIndexPaths:@[taxPath] withRowAnimation:UITableViewRowAnimationFade];
-        [tableView reloadRowsAtIndexPaths:@[totalPath] withRowAnimation:UITableViewRowAnimationFade];    
+        [tableView reloadRowsAtIndexPaths:@[totalPath] withRowAnimation:UITableViewRowAnimationFade];
+        
+        
     } else if (editingStyle == UITableViewCellEditingStyleInsert) {
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
     }
@@ -228,8 +247,6 @@
 }
 */
 
-
-
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([[segue identifier] isEqualToString:@"showDetail"]) {
@@ -237,21 +254,41 @@
         NSDate *object = _objects[indexPath.row];
         [[segue destinationViewController] setDetailItem:object];
     }
+    else if([[segue identifier] isEqualToString:@"SetBudget"])
+    {
+        EditBudgetViewController *editBudget = [segue destinationViewController];
+        editBudget.budget = _budget;
+    }
 }
 
 - (int)rowForTax
 {
-    return [self rowForTotal] - 1;
+    if([self getTax] == 0)
+    {
+        return -1;
+    }
+    else
+    {
+        return [self rowForTotal] - 1;
+    }
 }
 
 - (int)rowForTotal
 {
-    return [_objects count] +  2;
+    if([self getTax] == 0)
+    {
+        return [_objects count];
+    }
+    else
+    {
+        return [_objects count] +  1;
+    }
+    
 }
 
 - (int)objectIndexForPath:(NSIndexPath *)myPath
 {
-    return myPath.row - 1;
+    return myPath.row;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

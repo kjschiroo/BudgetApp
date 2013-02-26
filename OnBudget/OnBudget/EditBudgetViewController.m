@@ -27,6 +27,14 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    if(_budget == nil)
+    {
+        _BudgetInput.text = @"0.00";
+    }
+    else
+    {
+        _BudgetInput.text = [NSString stringWithFormat:@"%.02f", _budget.floatValue];
+    }
 
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -125,11 +133,9 @@
 {
     if([[segue identifier] isEqualToString:@"ReturnBudget"])
     {
-        double BadDevEnvironment;
         NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
         [f setNumberStyle:NSNumberFormatterDecimalStyle];
         self.budget = [f numberFromString:self.BudgetInput.text];
-        BadDevEnvironment = [self.budget doubleValue];
         if(self.budget == nil)
         {
             //self.budget = [[NSNumber alloc] initWithInt:0];
