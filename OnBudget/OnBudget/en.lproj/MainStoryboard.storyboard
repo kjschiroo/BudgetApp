@@ -28,11 +28,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ItemCell" textLabel="0RD-cC-6Vz" detailTextLabel="tLW-Ub-OfD" style="IBUITableViewCellStyleValue1" id="bbA-BK-0XA">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ItemCell" textLabel="0RD-cC-6Vz" detailTextLabel="tLW-Ub-OfD" style="IBUITableViewCellStyleValue1" id="bbA-BK-0XA">
                                 <rect key="frame" x="0.0" y="22" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="300" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Item" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="0RD-cC-6Vz">
@@ -43,7 +43,7 @@
                                             <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         </label>
                                         <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Cost" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="tLW-Ub-OfD">
-                                            <rect key="frame" x="275" y="11" width="35" height="21"/>
+                                            <rect key="frame" x="255" y="11" width="35" height="21"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.21960784310000001" green="0.3294117647" blue="0.52941176469999995" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -52,6 +52,9 @@
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <segue destination="4e9-IU-n8Z" kind="push" identifier="EditItem" id="Ka4-Bl-aMq"/>
+                                </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" indentationWidth="10" reuseIdentifier="TaxCell" textLabel="DIw-yB-wQG" detailTextLabel="Azk-Ks-Xa1" style="IBUITableViewCellStyleValue2" id="Mfg-qc-iWG">
                                 <rect key="frame" x="0.0" y="66" width="320" height="44"/>
@@ -99,7 +102,7 @@
                                 </view>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
-                                    <segue destination="utZ-vK-3wb" kind="modal" identifier="SetBudget" trigger="accessoryAction" id="Kan-iM-MQY"/>
+                                    <segue destination="Q3K-VO-GXc" kind="push" identifier="SetBudget" trigger="accessoryAction" id="kG3-ob-hhN"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -112,7 +115,7 @@
                     <navigationItem key="navigationItem" title="Cart" id="36">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="oRp-9X-9nU">
                             <connections>
-                                <segue destination="x6V-dU-y3S" kind="modal" id="KLe-yn-Qa9"/>
+                                <segue destination="4e9-IU-n8Z" kind="push" identifier="ReturnInput" id="vgc-hg-iof"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -280,14 +283,14 @@
                     </navigationItem>
                     <connections>
                         <outlet property="itemCostInputString" destination="zWl-Kv-BN7" id="XnD-IT-cGs"/>
-                        <outlet property="itemNameInput" destination="oUc-wB-7JE" id="vSZ-nh-gY9"/>
+                        <outlet property="itemNameInputString" destination="oUc-wB-7JE" id="jCR-9O-zGF"/>
                         <outlet property="itemQuantityInputString" destination="hTd-eD-NbI" id="LiS-Ur-hXx"/>
                         <outlet property="itemTaxedInputSwitch" destination="TQM-X7-tBZ" id="D9n-6K-opJ"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Prm-Ru-lXc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1525" y="477"/>
+            <point key="canvasLocation" x="999" y="477"/>
         </scene>
         <!--Edit Budget View Controller - Set Budget-->
         <scene sceneID="deG-7w-3wi">
@@ -359,44 +362,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MNg-wv-BUA" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1530" y="-213"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="bU7-Si-rTO">
-            <objects>
-                <navigationController id="x6V-dU-y3S" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="0Qc-5d-6Kz">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="4e9-IU-n8Z" kind="relationship" relationship="rootViewController" id="bWR-DW-hhK"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="h5v-NK-MsU" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="999" y="477"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="KfF-2g-KjN">
-            <objects>
-                <navigationController id="utZ-vK-3wb" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationItem key="navigationItem" id="x78-TL-hNV"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="1AG-Ix-ltX">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="Q3K-VO-GXc" kind="relationship" relationship="rootViewController" id="MtW-Vx-gsV"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="bGJ-TI-ptq" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1004" y="-213"/>
+            <point key="canvasLocation" x="999" y="-187"/>
         </scene>
     </scenes>
     <classes>
@@ -404,7 +370,7 @@
             <source key="sourceIdentifier" type="project" relativePath="./Classes/AddItemViewController.h"/>
             <relationships>
                 <relationship kind="outlet" name="itemCostInputString" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="itemNameInput" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="itemNameInputString" candidateClass="UITextField"/>
                 <relationship kind="outlet" name="itemQuantityInputString" candidateClass="UITextField"/>
                 <relationship kind="outlet" name="itemTaxedInputSwitch" candidateClass="UISwitch"/>
             </relationships>
@@ -434,4 +400,7 @@
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
+    <inferredMetricsTieBreakers>
+        <segue reference="Ka4-Bl-aMq"/>
+    </inferredMetricsTieBreakers>
 </document>

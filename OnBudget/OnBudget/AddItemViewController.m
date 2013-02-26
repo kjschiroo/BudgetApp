@@ -12,6 +12,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *itemQuantityInputString;
 @property (weak, nonatomic) IBOutlet UITextField *itemCostInputString;
 @property (weak, nonatomic) IBOutlet UISwitch *itemTaxedInputSwitch;
+@property (weak, nonatomic) IBOutlet UITextField *itemNameInputString;
 
 @end
 
@@ -29,6 +30,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    if(self.itemNameInput != nil && self.itemCostInput != nil && self.itemQuantityInput != nil && self.itemTaxedInput != nil)
+    {
+        self.itemNameInputString.text = self.itemNameInput;
+        self.itemCostInputString.text = [NSString stringWithFormat:@"%.02f", self.itemCostInput.floatValue];
+        self.itemQuantityInputString.text = [NSString stringWithFormat:@"%.02f", self.itemQuantityInput.floatValue];
+        self.itemTaxedInputSwitch.on = [self.itemTaxedInput boolValue];
+    }
 
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -46,7 +54,7 @@
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     NSLog(@"Text Field Should Return");
-    if((textField == self.itemNameInput)|| textField == self.itemCostInputString)
+    if((textField == self.itemNameInputString)|| textField == self.itemCostInputString)
     {
         [textField resignFirstResponder];
     }
@@ -87,6 +95,7 @@
     {
         NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
         [f setNumberStyle:NSNumberFormatterDecimalStyle];
+        self.itemNameInput = self.itemNameInputString.text;
         self.itemQuantityInput = [ f numberFromString:self.itemQuantityInputString.text];
         self.itemCostInput = [ f numberFromString:self.itemCostInputString.text];
         self.itemTaxedInput = [ NSNumber numberWithBool:[self.itemTaxedInputSwitch isOn]];

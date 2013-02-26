@@ -50,9 +50,9 @@
     if([[segue identifier] isEqualToString:@"ReturnInput"])
     {
         AddItemViewController *addController = [segue sourceViewController];
-        if(![addController.itemNameInput.text isEqualToString:@""])
+        if(![addController.itemNameInput isEqualToString:@""])
         {
-            NSMutableDictionary *item = [[NSMutableDictionary alloc] initWithObjectsAndKeys:addController.itemNameInput.text, @"name",
+            NSMutableDictionary *item = [[NSMutableDictionary alloc] initWithObjectsAndKeys:addController.itemNameInput, @"name",
                                  addController.itemQuantityInput, @"quantity", addController.itemCostInput,
                                  @"cost",addController.itemTaxedInput,@"taxed", nil];
             [self insertNewItem:item];
@@ -258,6 +258,16 @@
     {
         EditBudgetViewController *editBudget = [segue destinationViewController];
         editBudget.budget = _budget;
+    }
+    else if([[segue identifier] isEqualToString:@"EditItem"])
+    {
+        AddItemViewController *editItem = [segue destinationViewController];
+        NSMutableDictionary *item = _objects[[self.tableView indexPathForSelectedRow].row];
+        editItem.itemNameInput = [item objectForKey:@"name"];
+        editItem.itemCostInput = [item objectForKey:@"cost"];
+        editItem.itemQuantityInput = [item objectForKey:@"quantity"];
+        editItem.itemTaxedInput = [item objectForKey:@"taxed"];
+        
     }
 }
 
