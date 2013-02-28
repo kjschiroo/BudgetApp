@@ -56,7 +56,7 @@
                                     <segue destination="4e9-IU-n8Z" kind="push" identifier="EditItem" id="Ka4-Bl-aMq"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" indentationWidth="10" reuseIdentifier="TaxCell" textLabel="DIw-yB-wQG" detailTextLabel="Azk-Ks-Xa1" style="IBUITableViewCellStyleValue2" id="Mfg-qc-iWG">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="TaxCell" textLabel="DIw-yB-wQG" detailTextLabel="Azk-Ks-Xa1" style="IBUITableViewCellStyleValue2" id="Mfg-qc-iWG">
                                 <rect key="frame" x="0.0" y="66" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">

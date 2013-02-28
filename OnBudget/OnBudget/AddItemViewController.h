@@ -9,9 +9,14 @@
 #import <UIKit/UIKit.h>
 
 @interface AddItemViewController : UITableViewController <UITextFieldDelegate>
+/*
 @property (strong, nonatomic) NSString *itemNameInput;
 @property (strong, nonatomic) NSNumber *itemCostInput;
 @property (strong, nonatomic) NSNumber *itemQuantityInput;
 @property (strong, nonatomic) NSNumber *itemTaxedInput;
+@property (strong, nonatomic) NSNumber *rowIfEdit;
+ */
+@property (strong, nonatomic) NSMutableDictionary *item;
+@property (strong,nonatomic) NSNumber *isEdit;
 
 @end

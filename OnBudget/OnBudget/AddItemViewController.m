@@ -30,6 +30,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    if(self.item == nil)
+    {
+        self.item = [[NSMutableDictionary alloc] init];
+    }
+    /*
     if(self.itemNameInput != nil && self.itemCostInput != nil && self.itemQuantityInput != nil && self.itemTaxedInput != nil)
     {
         self.itemNameInputString.text = self.itemNameInput;
@@ -37,13 +42,26 @@
         self.itemQuantityInputString.text = [NSString stringWithFormat:@"%.02f", self.itemQuantityInput.floatValue];
         self.itemTaxedInputSwitch.on = [self.itemTaxedInput boolValue];
     }
+     */
+    if(self.item[@"name"] != nil)
+    {
+        self.itemNameInputString.text = self.item[@"name"];
+    }
+    if(self.item[@"cost"] != nil)
+    {
+        self.itemCostInputString.text = [NSString stringWithFormat:@"%@", (NSNumber *)self.item[@"cost"]];
+    }  
+    if(self.item[@"quantity"] != nil)
+    {
+        self.itemQuantityInputString.text = [NSString stringWithFormat:@"%@", (NSNumber *)self.item[@"quantity"]];
+    }
+    if(self.item[@"taxed"] != nil)
+    {
+        self.itemTaxedInputSwitch.on = [(NSNumber *)self.item[@"taxed"] boolValue];
+    }
 
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
+
 
 - (void)didReceiveMemoryWarning
 {
@@ -93,12 +111,29 @@
 {
     if([[segue identifier] isEqualToString:@"ReturnInput"])
     {
-        NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
-        [f setNumberStyle:NSNumberFormatterDecimalStyle];
+        if(![self.itemNameInputString.text isEqualToString:@""])
+        {
+            NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
+            [f setNumberStyle:NSNumberFormatterDecimalStyle];
+            self.item[@"name"] = self.itemNameInputString.text;
+            if([ f numberFromString:self.itemQuantityInputString.text] != nil)
+            {
+                self.item[@"quantity"] = [ f numberFromString:self.itemQuantityInputString.text];
+            }
+            if([ f numberFromString:self.itemCostInputString.text] != nil)
+            {
+                self.item[@"cost"] = [ f numberFromString:self.itemCostInputString.text];
+            }
+            self.item[@"taxed"] = [ NSNumber numberWithBool:[self.itemTaxedInputSwitch isOn]];
+        }
+        
+        
+        /*
         self.itemNameInput = self.itemNameInputString.text;
         self.itemQuantityInput = [ f numberFromString:self.itemQuantityInputString.text];
         self.itemCostInput = [ f numberFromString:self.itemCostInputString.text];
         self.itemTaxedInput = [ NSNumber numberWithBool:[self.itemTaxedInputSwitch isOn]];
+         */
     }
 }
 

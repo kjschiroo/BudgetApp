@@ -50,14 +50,11 @@
     if([[segue identifier] isEqualToString:@"ReturnInput"])
     {
         AddItemViewController *addController = [segue sourceViewController];
-        if(![addController.itemNameInput isEqualToString:@""])
+        if(addController.item[@"name"] != nil && ![addController.isEdit boolValue])
         {
-            NSMutableDictionary *item = [[NSMutableDictionary alloc] initWithObjectsAndKeys:addController.itemNameInput, @"name",
-                                 addController.itemQuantityInput, @"quantity", addController.itemCostInput,
-                                 @"cost",addController.itemTaxedInput,@"taxed", nil];
-            [self insertNewItem:item];
-            [self.tableView reloadData];
+            [self insertNewItem:addController.item];
         }
+        [self.tableView reloadData];
         [self dismissViewControllerAnimated:YES completion:NULL];
     }
     else if ([[segue identifier] isEqualToString:@"ReturnBudget"])
@@ -91,7 +88,7 @@
     }
     [_objects insertObject:item atIndex:[_objects count]];
     //NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_objects count]-1 inSection:0];
-    [self.tableView reloadData];
+    //[self.tableView reloadData];
     //[self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
@@ -174,7 +171,7 @@
         cost = [item objectForKey:@"cost"];
         quantity = [item objectForKey:@"quantity"];
         cell.textLabel.text = [item objectForKey:@"name"];
-        if (quantity != 0) {
+        if (quantity != 0 && cost != 0) {
             cell.detailTextLabel.text = [formatter stringFromNumber:[NSNumber numberWithDouble:([cost doubleValue]*[quantity doubleValue])]];
             //cell.detailTextLabel.text = [NSString stringWithFormat:@"%.02f",[cost doubleValue]*[quantity doubleValue] ];
         }
@@ -263,10 +260,15 @@
     {
         AddItemViewController *editItem = [segue destinationViewController];
         NSMutableDictionary *item = _objects[[self.tableView indexPathForSelectedRow].row];
+        editItem.item = item;
+        editItem.isEdit = [NSNumber numberWithBool:true];
+        /*
         editItem.itemNameInput = [item objectForKey:@"name"];
         editItem.itemCostInput = [item objectForKey:@"cost"];
         editItem.itemQuantityInput = [item objectForKey:@"quantity"];
         editItem.itemTaxedInput = [item objectForKey:@"taxed"];
+        editItem.rowIfEdit = [NSNumber numberWithInteger:[self.tableView indexPathForSelectedRow].row];
+         */
         
     }
 }
