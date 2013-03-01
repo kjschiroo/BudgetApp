@@ -43,6 +43,28 @@
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
     self.navigationItem.rightBarButtonItem = addButton;
      */
+    
+    UIApplication *app = [UIApplication sharedApplication];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:app];
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask,YES);
+    
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *plistPath = [documentsDirectory stringByAppendingPathComponent:@"data.plist"];
+    
+    
+    if([fileManager fileExistsAtPath:plistPath] == YES)
+    {
+        //Uses much of the same as D.C.'s example, but different final bit
+        //http://www.scratchmytail.com/2009/11/06/storing-custom-objects-to-disk-on-the-iphone/
+        NSMutableArray *storageBox = [[NSMutableArray alloc] init];
+        storageBox = [NSKeyedUnarchiver unarchiveObjectWithFile:plistPath];
+        _objects = (NSMutableArray *)storageBox[0];
+        _budget = (NSNumber *)storageBox[1];
+        [self.tableView reloadData];
+    }
+    
 }
 
 - (IBAction)done:(UIStoryboardSegue *)segue
@@ -311,6 +333,7 @@
         [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     }
 }
+
 - (double)getTax
 {
     double total = 0;
@@ -329,4 +352,15 @@
     return total;
 }
 
+- (void)applicationDidEnterBackground:(NSNotification *)notification {
+    NSLog(@"Entering Background");
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *plistPath = [documentsDirectory stringByAppendingPathComponent:@"data.plist"];
+    NSMutableArray *storageBox = [[NSMutableArray alloc] initWithObjects:_objects,_budget, nil];
+    
+    [NSKeyedArchiver archiveRootObject:storageBox toFile:plistPath];
+    
+    //[[NSDictionary dictionaryWithObjectsAndKeys: _objects,@"task", nil] writeToFile:plistPath atomically:YES];
+}
 @end
