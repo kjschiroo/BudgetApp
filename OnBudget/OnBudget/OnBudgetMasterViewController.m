@@ -313,6 +313,7 @@
         [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     }
 }
+
 - (double)getTax
 {
     double total = 0;
@@ -331,4 +332,15 @@
     return total;
 }
 
+- (void)applicationDidEnterBackground:(NSNotification *)notification {
+    NSLog(@"Entering Background");
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *plistPath = [documentsDirectory stringByAppendingPathComponent:@"data.plist"];
+    NSMutableArray *storageBox = [[NSMutableArray alloc] initWithObjects:_objects,_budget, nil];
+    
+    [NSKeyedArchiver archiveRootObject:storageBox toFile:plistPath];
+    
+    //[[NSDictionary dictionaryWithObjectsAndKeys: _objects,@"task", nil] writeToFile:plistPath atomically:YES];
+}
 @end
