@@ -1,19 +1,19 @@
 //
-//  EditBudgetViewController.m
+//  ItemListViewController.m
 //  OnBudget
 //
-//  Created by KEVIN SCHIROO on 2/21/13.
+//  Created by KEVIN SCHIROO on 3/12/13.
 //  Copyright (c) 2013 KEVIN SCHIROO. All rights reserved.
 //
 
-#import "EditBudgetViewController.h"
+#import "ItemListViewController.h"
 
-@interface EditBudgetViewController ()
-@property (weak, nonatomic) IBOutlet UITextField *BudgetInput;
-
+@interface ItemListViewController (){
+    NSMutableArray *_objects;
+}
 @end
 
-@implementation EditBudgetViewController
+@implementation ItemListViewController
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -27,14 +27,16 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    if(_budget == nil || _budget.floatValue == 0)
-    {
-        _BudgetInput.text = @"";
-    }
-    else
-    {
-        _BudgetInput.text = [NSString stringWithFormat:@"%.02f", _budget.floatValue];
-    }
+    
+    _objects = [[NSMutableArray alloc] init];
+    [_objects insertObject:@"Apples" atIndex:0];
+    [_objects insertObject:@"Bananas" atIndex:0];
+    [_objects insertObject:@"Cookies" atIndex:0];
+    [_objects insertObject:@"Dog Food" atIndex:0];
+    [_objects insertObject:@"Egg Plant" atIndex:0];
+    [_objects insertObject:@"Fish" atIndex:0];
+    [_objects insertObject:@"Grog" atIndex:0];
+    
 
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -49,59 +51,31 @@
     // Dispose of any resources that can be recreated.
 }
 
--(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
-    NSLog(@"should change characters in range");
-    if(textField == self.BudgetInput)
-    {
-        NSString *newString = [textField.text stringByReplacingCharactersInRange:range withString:string];
-        
-        NSArray *sep = [newString componentsSeparatedByString:@"."];
-        if([sep count] <=2)
-        {
-            if([sep count] ==2)
-            {
-                return [sep[1] length]<=2;
-            }
-            return YES;
-        }
-        else
-        {
-            return NO;
-        }
-    }
-    return YES;
-    
-}
-
 #pragma mark - Table view data source
 
-/*
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
     // Return the number of sections.
-    return 0;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
     // Return the number of rows in the section.
-    return 1;
+    return [_objects count];
 }
- 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
+    static NSString *CellIdentifier = @"ItemCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
-    // Configure the cell...
+    cell.textLabel.text = _objects[indexPath.row];
     
     return cell;
 }
 
-
+/*
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -151,24 +125,6 @@
      // Pass the selected object to the new view controller.
      [self.navigationController pushViewController:detailViewController animated:YES];
      */
-}
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    if([[segue identifier] isEqualToString:@"ReturnBudget"])
-    {
-        NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
-        [f setNumberStyle:NSNumberFormatterDecimalStyle];
-        self.budget = [f numberFromString:self.BudgetInput.text];
-        if(self.budget == nil)
-        {
-            //self.budget = [[NSNumber alloc] initWithInt:0];
-            //self.budget = [f numberFromString:@"0"];
-            self.budget = [[NSNumber alloc] initWithDouble:0.00];
-            //self.budget = [[NSNumber alloc] initWithLong:0];
-        }
-    
-    }
 }
 
 @end

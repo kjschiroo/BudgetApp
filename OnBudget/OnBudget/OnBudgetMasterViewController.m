@@ -34,15 +34,17 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-    self.navigationItem.leftBarButtonItem = self.editButtonItem;
+    //self.navigationItem.leftBarButtonItem = self.editButtonItem;
     _budget =[[NSNumber alloc] initWithFloat:0.00];
     _taxRate = [[NSNumber alloc] initWithFloat:0.065];
     displayTotal = NO;
+    //self.navigationItem.rightBarButtonItem = @[self.navigationItem.rightBarButtonItem, itemLibraryButton];
     
-    /*
-    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
-    self.navigationItem.rightBarButtonItem = addButton;
-     */
+}
+
+- (IBAction)goToList:(id)sender
+{
+    NSLog(@"goToList");
 }
 
 - (IBAction)done:(UIStoryboardSegue *)segue

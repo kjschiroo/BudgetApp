@@ -127,13 +127,6 @@
             self.item[@"taxed"] = [ NSNumber numberWithBool:[self.itemTaxedInputSwitch isOn]];
         }
         
-        
-        /*
-        self.itemNameInput = self.itemNameInputString.text;
-        self.itemQuantityInput = [ f numberFromString:self.itemQuantityInputString.text];
-        self.itemCostInput = [ f numberFromString:self.itemCostInputString.text];
-        self.itemTaxedInput = [ NSNumber numberWithBool:[self.itemTaxedInputSwitch isOn]];
-         */
     }
 }
 

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		3861A1F816D6774800A62B28 /* EditBudgetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3861A1F716D6774800A62B28 /* EditBudgetViewController.m */; };
+		38B4295016EF82E100C6A3F1 /* ItemListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 38B4294F16EF82E100C6A3F1 /* ItemListViewController.m */; };
 		38D6061B16CC3E3F00BA680D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38D6061A16CC3E3F00BA680D /* UIKit.framework */; };
 		38D6061D16CC3E3F00BA680D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38D6061C16CC3E3F00BA680D /* Foundation.framework */; };
 		38D6061F16CC3E3F00BA680D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38D6061E16CC3E3F00BA680D /* CoreGraphics.framework */; };
@@ -25,6 +26,8 @@
 /* Begin PBXFileReference section */
 		3861A1F616D6774800A62B28 /* EditBudgetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditBudgetViewController.h; sourceTree = "<group>"; };
 		3861A1F716D6774800A62B28 /* EditBudgetViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditBudgetViewController.m; sourceTree = "<group>"; };
+		38B4294E16EF82E100C6A3F1 /* ItemListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ItemListViewController.h; sourceTree = "<group>"; };
+		38B4294F16EF82E100C6A3F1 /* ItemListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ItemListViewController.m; sourceTree = "<group>"; };
 		38D6061616CC3E3E00BA680D /* OnBudget.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OnBudget.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		38D6061A16CC3E3F00BA680D /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		38D6061C16CC3E3F00BA680D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -92,6 +95,8 @@
 				38D6062916CC3E3F00BA680D /* OnBudgetAppDelegate.h */,
 				38D6062A16CC3E3F00BA680D /* OnBudgetAppDelegate.m */,
 				38D6063216CC3E3F00BA680D /* MainStoryboard.storyboard */,
+				38B4294E16EF82E100C6A3F1 /* ItemListViewController.h */,
+				38B4294F16EF82E100C6A3F1 /* ItemListViewController.m */,
 				3861A1F616D6774800A62B28 /* EditBudgetViewController.h */,
 				3861A1F716D6774800A62B28 /* EditBudgetViewController.m */,
 				38D6064016CC444600BA680D /* AddItemViewController.h */,
@@ -189,6 +194,7 @@
 				38D6063716CC3E3F00BA680D /* OnBudgetMasterViewController.m in Sources */,
 				38D6064216CC444600BA680D /* AddItemViewController.m in Sources */,
 				3861A1F816D6774800A62B28 /* EditBudgetViewController.m in Sources */,
+				38B4295016EF82E100C6A3F1 /* ItemListViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
