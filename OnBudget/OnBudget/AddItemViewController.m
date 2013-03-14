@@ -116,14 +116,21 @@
             NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
             [f setNumberStyle:NSNumberFormatterDecimalStyle];
             self.item[@"name"] = self.itemNameInputString.text;
-            if([ f numberFromString:self.itemQuantityInputString.text] != nil)
-            {
-                self.item[@"quantity"] = [ f numberFromString:self.itemQuantityInputString.text];
-            }
+            
             if([ f numberFromString:self.itemCostInputString.text] != nil)
             {
                 self.item[@"cost"] = [ f numberFromString:self.itemCostInputString.text];
             }
+            
+            if([ f numberFromString:self.itemQuantityInputString.text] != nil)
+            {
+                self.item[@"quantity"] = [ f numberFromString:self.itemQuantityInputString.text];
+            }
+            else if([ f numberFromString:self.itemCostInputString.text] != nil)
+            {
+                self.item[@"quantity"] = [NSNumber numberWithInt:1];
+            }
+            
             self.item[@"taxed"] = [ NSNumber numberWithBool:[self.itemTaxedInputSwitch isOn]];
         }
         

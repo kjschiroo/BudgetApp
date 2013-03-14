@@ -43,6 +43,24 @@
     displayTotal = NO;
     self.navigationItem.rightBarButtonItems = @[self.navigationItem.rightBarButtonItem, itemLibraryButton];
     
+    UIApplication *app = [UIApplication sharedApplication];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:app];
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask,YES);
+    
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *plistPath = [documentsDirectory stringByAppendingPathComponent:@"items.plist"];
+    
+    
+    if([fileManager fileExistsAtPath:plistPath] == YES)
+    {
+        NSMutableArray *storageBox = [NSKeyedUnarchiver unarchiveObjectWithFile:plistPath];
+        _objects = [storageBox objectAtIndex:0];
+        _budget = [storageBox objectAtIndex:1];
+        [self.tableView reloadData];
+    }
+    
 }
 
 - (IBAction)goToList:(id)sender
@@ -161,7 +179,14 @@
         }
         else
         {
-            cell.textLabel.text = @"Balance";
+            if(total != 0)
+            {
+                cell.textLabel.text = @"Balance";
+            }
+            else
+            {
+                cell.textLabel.text = @"Budget";
+            }
             cell.detailTextLabel.text = [formatter stringFromNumber:[NSNumber numberWithDouble:([_budget doubleValue] -total)]];
             if(total > [_budget doubleValue])
             {
@@ -353,7 +378,7 @@
     NSLog(@"Entering Background");
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString *plistPath = [documentsDirectory stringByAppendingPathComponent:@"data.plist"];
+    NSString *plistPath = [documentsDirectory stringByAppendingPathComponent:@"items.plist"];
     NSMutableArray *storageBox = [[NSMutableArray alloc] initWithObjects:_objects,_budget, nil];
     
     [NSKeyedArchiver archiveRootObject:storageBox toFile:plistPath];
