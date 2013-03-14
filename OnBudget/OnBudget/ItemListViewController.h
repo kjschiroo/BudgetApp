@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface ItemListViewController : UITableViewController
-
+@property (strong, nonatomic) NSMutableArray* selectedList;
 @end

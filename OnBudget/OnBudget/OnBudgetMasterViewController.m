@@ -14,11 +14,14 @@
 
 #import "EditBudgetViewController.h"
 
+#import "ItemListViewController.h"
+
 @interface OnBudgetMasterViewController () {
     NSMutableArray *_objects;
     bool displayTotal;
     NSNumber *_budget;
     NSNumber *_taxRate;
+    __weak IBOutlet UIBarButtonItem *itemLibraryButton;
     
 }
 @end
@@ -38,7 +41,7 @@
     _budget =[[NSNumber alloc] initWithFloat:0.00];
     _taxRate = [[NSNumber alloc] initWithFloat:0.065];
     displayTotal = NO;
-    //self.navigationItem.rightBarButtonItem = @[self.navigationItem.rightBarButtonItem, itemLibraryButton];
+    self.navigationItem.rightBarButtonItems = @[self.navigationItem.rightBarButtonItem, itemLibraryButton];
     
 }
 
@@ -66,6 +69,14 @@
         [self.tableView reloadData];
         [self dismissViewControllerAnimated:YES completion:NULL];
     }
+    else if ([[segue identifier] isEqualToString:@"ReturnList"])
+    {
+        ItemListViewController *listController = [segue sourceViewController];
+        for(NSMutableDictionary *d in listController.selectedList)
+        {
+            [self insertNewItem:d];
+        }
+    }
 }
 
 - (IBAction)cancel:(UIStoryboardSegue *)segue
@@ -88,9 +99,15 @@
     {
         _objects = [[NSMutableArray alloc] init];
     }
+    for (NSMutableDictionary * pItem in _objects) {
+        if([[pItem objectForKey:@"name"] isEqualToString:[item objectForKey:@"name"]])
+        {
+            return;
+        }
+    }
     [_objects insertObject:item atIndex:[_objects count]];
     //NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_objects count]-1 inSection:0];
-    //[self.tableView reloadData];
+    [self.tableView reloadData];
     //[self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 

@@ -7,7 +7,7 @@
         <!--Navigation Controller-->
         <scene sceneID="11">
             <objects>
-                <navigationController toolbarHidden="NO" id="3" sceneMemberID="viewController">
+                <navigationController id="3" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="4">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -117,7 +117,6 @@
                         </connections>
                     </tableView>
                     <toolbarItems>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="Bpf-vk-BHh"/>
                         <barButtonItem systemItem="bookmarks" id="3WB-b4-wsC">
                             <connections>
                                 <segue destination="ILW-CR-yfl" kind="push" identifier="loadFromLibrary" id="B6R-lN-qOY"/>
@@ -132,6 +131,9 @@
                         </barButtonItem>
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="itemLibraryButton" destination="3WB-b4-wsC" id="Fcm-7K-Ezw"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="17" sceneMemberID="firstResponder"/>
                 <exit id="8OB-37-VXf" userLabel="Exit" sceneMemberID="exit"/>
@@ -329,7 +331,7 @@
                                             <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         </label>
                                         <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="u1Z-tZ-7K6">
-                                            <rect key="frame" x="310" y="11" width="0.0" height="0.0"/>
+                                            <rect key="frame" x="266" y="11" width="44" height="21"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.21960784310000001" green="0.3294117647" blue="0.52941176469999995" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -354,7 +356,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="done" id="ghN-mw-ria">
                             <connections>
-                                <segue destination="8OB-37-VXf" kind="unwind" unwindAction="done:" id="9e6-3U-l87"/>
+                                <segue destination="8OB-37-VXf" kind="unwind" identifier="ReturnList" unwindAction="done:" id="9e6-3U-l87"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -446,6 +448,6 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="Ka4-Bl-aMq"/>
+        <segue reference="vgc-hg-iof"/>
     </inferredMetricsTieBreakers>
 </document>

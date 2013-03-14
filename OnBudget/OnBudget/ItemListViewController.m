@@ -28,16 +28,59 @@
 {
     [super viewDidLoad];
     
-    _objects = [[NSMutableArray alloc] init];
-    [_objects insertObject:@"Apples" atIndex:0];
-    [_objects insertObject:@"Bananas" atIndex:0];
-    [_objects insertObject:@"Cookies" atIndex:0];
-    [_objects insertObject:@"Dog Food" atIndex:0];
-    [_objects insertObject:@"Egg Plant" atIndex:0];
-    [_objects insertObject:@"Fish" atIndex:0];
-    [_objects insertObject:@"Grog" atIndex:0];
+    if(!self.selectedList)
+    {
+        self.selectedList = [[NSMutableArray alloc] init];
+    }
     
-
+    //Items from list at
+    //http://www.jacksonfoodpantry.com/foodnonfooditemlist.htm
+    _objects = [[NSMutableArray alloc] init];
+    
+    [_objects insertObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Vegetables", @"Item", [NSNumber numberWithBool:NO], @"Selected", nil] atIndex:0];
+    [_objects insertObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Tuna", @"Item", [NSNumber numberWithBool:NO], @"Selected", nil] atIndex:0];
+    [_objects insertObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Toothpaste", @"Item", [NSNumber numberWithBool:NO], @"Selected", nil] atIndex:0];
+    [_objects insertObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Toothbrushes", @"Item", [NSNumber numberWithBool:NO], @"Selected", nil] atIndex:0];
+    [_objects insertObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Tomatoes", @"Item", [NSNumber numberWithBool:NO], @"Selected", nil] atIndex:0];
+    [_objects insertObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Toilet Paper", @"Item", [NSNumber numberWithBool:NO], @"Selected", nil] atIndex:0];
+    [_objects insertObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Tea", @"Item", [NSNumber numberWithBool:NO], @"Selected", nil] atIndex:0];
+    [_objects insertObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Syrup", @"Item", [NSNumber numberWithBool:NO], @"Selected", nil] atIndex:0];
+    [_objects insertObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Stuffing Mix", @"Item", [NSNumber numberWithBool:NO], @"Selected", nil] atIndex:0];
+    [_objects insertObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Spam", @"Item", [NSNumber numberWithBool:NO], @"Selected", nil] atIndex:0];
+    [_objects insertObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Soups", @"Item", [NSNumber numberWithBool:NO], @"Selected", nil] atIndex:0];
+    [_objects insertObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Shampoo", @"Item", [NSNumber numberWithBool:NO], @"Selected", nil] atIndex:0];
+    [_objects insertObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Rice", @"Item", [NSNumber numberWithBool:NO], @"Selected", nil] atIndex:0];
+    [_objects insertObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Powered Milk", @"Item", [NSNumber numberWithBool:NO], @"Selected", nil] atIndex:0];
+    [_objects insertObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Pop Tarts", @"Item", [NSNumber numberWithBool:NO], @"Selected", nil] atIndex:0];
+    [_objects insertObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Peanut Butter", @"Item", [NSNumber numberWithBool:NO], @"Selected", nil] atIndex:0];
+    [_objects insertObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Pastas", @"Item", [NSNumber numberWithBool:NO], @"Selected", nil] atIndex:0];
+    [_objects insertObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Pasta Sauce", @"Item", [NSNumber numberWithBool:NO], @"Selected", nil] atIndex:0];
+    [_objects insertObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Paper Towels", @"Item", [NSNumber numberWithBool:NO], @"Selected", nil] atIndex:0];
+    [_objects insertObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Pancake Mix", @"Item", [NSNumber numberWithBool:NO], @"Selected", nil] atIndex:0];
+    [_objects insertObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Mustard", @"Item", [NSNumber numberWithBool:NO], @"Selected", nil] atIndex:0];
+    [_objects insertObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Mayonnaise", @"Item", [NSNumber numberWithBool:NO], @"Selected", nil] atIndex:0];
+    [_objects insertObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Mashed Potatoes", @"Item", [NSNumber numberWithBool:NO], @"Selected", nil] atIndex:0];
+    [_objects insertObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Macaroni & Cheese", @"Item", [NSNumber numberWithBool:NO], @"Selected", nil] atIndex:0];
+    [_objects insertObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Laundry Supplies", @"Item", [NSNumber numberWithBool:NO], @"Selected", nil] atIndex:0];
+    [_objects insertObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Ketchup", @"Item", [NSNumber numberWithBool:NO], @"Selected", nil] atIndex:0];
+    [_objects insertObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Juice Boxes", @"Item", [NSNumber numberWithBool:NO], @"Selected", nil] atIndex:0];
+    [_objects insertObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Jelly", @"Item", [NSNumber numberWithBool:NO], @"Selected", nil] atIndex:0];
+    [_objects insertObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Hot Chocolate", @"Item", [NSNumber numberWithBool:NO], @"Selected", nil] atIndex:0];
+    [_objects insertObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Hamberger Helper", @"Item", [NSNumber numberWithBool:NO], @"Selected", nil] atIndex:0];
+    [_objects insertObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Gravy", @"Item", [NSNumber numberWithBool:NO], @"Selected", nil] atIndex:0];
+    [_objects insertObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Fruits", @"Item", [NSNumber numberWithBool:NO], @"Selected", nil] atIndex:0];
+    [_objects insertObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Deodorant", @"Item", [NSNumber numberWithBool:NO], @"Selected", nil] atIndex:0];
+    [_objects insertObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Coffee", @"Item", [NSNumber numberWithBool:NO], @"Selected", nil] atIndex:0];
+    [_objects insertObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Cleaning supplies", @"Item", [NSNumber numberWithBool:NO], @"Selected", nil] atIndex:0];
+    [_objects insertObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Chili", @"Item", [NSNumber numberWithBool:NO], @"Selected", nil] atIndex:0];
+    [_objects insertObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Chicken", @"Item", [NSNumber numberWithBool:NO], @"Selected", nil] atIndex:0];
+    [_objects insertObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Cereal", @"Item", [NSNumber numberWithBool:NO], @"Selected", nil] atIndex:0];
+    [_objects insertObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Bottled Water", @"Item", [NSNumber numberWithBool:NO], @"Selected", nil] atIndex:0];
+    [_objects insertObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Beef Stew", @"Item", [NSNumber numberWithBool:NO], @"Selected", nil] atIndex:0];
+    [_objects insertObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Bath Soap", @"Item", [NSNumber numberWithBool:NO], @"Selected", nil] atIndex:0];
+    [_objects insertObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Baby Items", @"Item", [NSNumber numberWithBool:NO], @"Selected", nil] atIndex:0];
+    [_objects insertObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Applesauce", @"Item", [NSNumber numberWithBool:NO], @"Selected", nil] atIndex:0];
+    
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
  
@@ -70,7 +113,17 @@
     static NSString *CellIdentifier = @"ItemCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
-    cell.textLabel.text = _objects[indexPath.row];
+    NSMutableDictionary *object;
+    NSNumber *isSelected = [_objects[indexPath.row] objectForKey:@"Selected"];
+    object = _objects[indexPath.row];
+    cell.textLabel.text = [object objectForKey: @"Item"];
+    if( [isSelected boolValue])
+    {
+        [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
+    }else
+    {
+        [cell setAccessoryType:UITableViewCellAccessoryNone];
+    }
     
     return cell;
 }
@@ -118,13 +171,35 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     */
+    NSNumber *isSelected = [_objects[indexPath.row] objectForKey:@"Selected"];
+    if([isSelected boolValue])
+    {
+        [_objects[indexPath.row] setValue:[NSNumber numberWithBool:NO] forKey:@"Selected"];
+    }
+    else
+    {
+        [_objects[indexPath.row] setValue:[NSNumber numberWithBool:YES] forKey:@"Selected"];
+    }
+    [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+}
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if([[segue identifier] isEqualToString:@"ReturnList"])
+    {
+        NSNumber *selectedItem;
+        NSString *itemName;
+        for( NSMutableDictionary *d in _objects)
+        {
+            selectedItem = [d objectForKey:@"Selected"];
+            itemName = [d objectForKey:@"Item"];
+            if([selectedItem boolValue] == YES)
+            {
+                [self.selectedList insertObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:itemName, @"name", nil] atIndex:[self.selectedList count]];
+            }
+        }
+        
+    }
 }
 
 @end
