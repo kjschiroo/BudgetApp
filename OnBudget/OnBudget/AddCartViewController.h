@@ -1,5 +1,5 @@
 //
-//  OnBudgetMasterViewController.h
+//  AddCartViewController.h
 //  OnBudget
 //
 //  Created by KEVIN SCHIROO on 3/21/13.
@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface OnBudgetMasterViewController : UITableViewController
-
+@interface AddCartViewController : UITableViewController
+    @property (strong, nonatomic) NSMutableDictionary *cart;
 @end
