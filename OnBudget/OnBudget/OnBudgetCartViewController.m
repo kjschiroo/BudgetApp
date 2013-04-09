@@ -166,7 +166,7 @@
         cell = [tableView dequeueReusableCellWithIdentifier:@"TotalCell" forIndexPath:indexPath];
         double total = 0;
         for (NSMutableDictionary *item in _cart[@"objects"]) {
-            cost = [item objectForKey:@"cost"];
+            cost = [[item objectForKey:@"cost"][0] objectForKey:@"cost"];
             quantity = [item objectForKey:@"quantity"];
             total += [cost doubleValue]*[quantity doubleValue];
         }
@@ -216,7 +216,7 @@
     {
         cell = [tableView dequeueReusableCellWithIdentifier:@"ItemCell" forIndexPath:indexPath];
         NSMutableDictionary *item = _cart[@"objects"][indexPath.row];
-        cost = [item objectForKey:@"cost"];
+        cost = [[item objectForKey:@"cost"][0] objectForKey:@"cost"];
         quantity = [item objectForKey:@"quantity"];
         cell.textLabel.text = [item objectForKey:@"name"];
         if (quantity != 0 && cost != 0) {
@@ -302,10 +302,10 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     NSLog(@"I'm preparing for segue");
-    if ([[segue identifier] isEqualToString:@"showDetail"]) {
-        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-        NSDate *object = _cart[@"objects"][indexPath.row];
-        [[segue destinationViewController] setDetailItem:object];
+    if ([[segue identifier] isEqualToString:@"AddNewItem"]) {
+        AddItemViewController *editItem = [segue destinationViewController];
+        editItem.isEdit = [NSNumber numberWithBool:false];
+        editItem.allItems = self.allItems;
     }
     else if([[segue identifier] isEqualToString:@"SetBudget"])
     {
@@ -318,6 +318,7 @@
         NSMutableDictionary *item = _cart[@"objects"][[self.tableView indexPathForSelectedRow].row];
         editItem.item = item;
         editItem.isEdit = [NSNumber numberWithBool:true];
+        editItem.allItems = self.allItems;
         /*
         editItem.itemNameInput = [item objectForKey:@"name"];
         editItem.itemCostInput = [item objectForKey:@"cost"];
@@ -326,6 +327,11 @@
         editItem.rowIfEdit = [NSNumber numberWithInteger:[self.tableView indexPathForSelectedRow].row];
          */
         
+    }
+    else if([[segue identifier] isEqualToString:@"loadFromLibrary"])
+    {
+        ItemListViewController *itemList = [segue destinationViewController];
+        itemList.allItems = self.allItems;
     }
 }
 
@@ -378,7 +384,7 @@
         taxed = [[item objectForKey:@"taxed"] boolValue];
         if(taxed)
         {
-            cost = [[item objectForKey:@"cost"] doubleValue];
+            cost = [[[item objectForKey:@"cost"][0] objectForKey:@"cost"] doubleValue];
             quantity = [[item objectForKey:@"quantity"] doubleValue];
             total += cost*quantity*[_cart[@"tax"] doubleValue];
         }

@@ -11,7 +11,8 @@
 #import "OnBudgetCartViewController.h"
 
 @interface OnBudgetMasterViewController (){
-    NSMutableArray *_objects;
+    NSMutableArray *_carts;
+    NSMutableArray *_items;
 }
 @end
 
@@ -45,8 +46,21 @@
     
     if([fileManager fileExistsAtPath:plistPath] == YES)
     {
-        _objects = [NSKeyedUnarchiver unarchiveObjectWithFile:plistPath];
+        _carts = [NSKeyedUnarchiver unarchiveObjectWithFile:plistPath];
         [self.tableView reloadData];
+    }
+    
+    plistPath = [documentsDirectory stringByAppendingPathComponent:@"items.plist"];
+    
+    
+    if([fileManager fileExistsAtPath:plistPath] == YES)
+    {
+        _items = [NSKeyedUnarchiver unarchiveObjectWithFile:plistPath];
+        [self.tableView reloadData];
+    }
+    else
+    {
+        _items = [[NSMutableArray alloc] init];
     }
      
     
@@ -68,7 +82,7 @@
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         
-        [_objects removeObjectAtIndex:indexPath.row];
+        [_carts removeObjectAtIndex:indexPath.row];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
         
     } else if (editingStyle == UITableViewCellEditingStyleInsert) {
@@ -93,35 +107,35 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return [_objects count];
+    return [_carts count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"budgetCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-    cell.textLabel.text = _objects[indexPath.row][@"name"];
+    cell.textLabel.text = _carts[indexPath.row][@"name"];
     
     NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     [formatter setNumberStyle:NSNumberFormatterCurrencyStyle];
-    cell.detailTextLabel.text = [formatter stringFromNumber:_objects[indexPath.row][@"budget"]];
+    cell.detailTextLabel.text = [formatter stringFromNumber:_carts[indexPath.row][@"budget"]];
     
     return cell;
 }
 
 - (void)insertNewItem:(NSMutableDictionary *)item
 {
-    if(!_objects)
+    if(!_carts)
     {
-        _objects = [[NSMutableArray alloc] init];
+        _carts = [[NSMutableArray alloc] init];
     }
-    for (NSMutableDictionary * pItem in _objects) {
+    for (NSMutableDictionary * pItem in _carts) {
         if([[pItem objectForKey:@"name"] isEqualToString:[item objectForKey:@"name"]])
         {
             return;
         }
     }
-    [_objects insertObject:item atIndex:[_objects count]];
+    [_carts insertObject:item atIndex:[_carts count]];
     //NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_objects count]-1 inSection:0];
     [self.tableView reloadData];
     //[self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -137,8 +151,9 @@
     if([[segue identifier] isEqualToString:@"EditCart"])
     {
         OnBudgetCartViewController *editCart = [segue destinationViewController];
-        NSMutableDictionary *cart = _objects[[self.tableView indexPathForSelectedRow].row];
+        NSMutableDictionary *cart = _carts[[self.tableView indexPathForSelectedRow].row];
         editCart.cart = cart;
+        editCart.allItems = _items;
         
         
     }
@@ -175,9 +190,9 @@
 // Override to support rearranging the table view.
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
 {
-    NSMutableDictionary *temp = _objects[fromIndexPath.row];
-    [ _objects removeObjectAtIndex:fromIndexPath.row];
-    [ _objects insertObject:temp atIndex:toIndexPath.row];
+    NSMutableDictionary *temp = _carts[fromIndexPath.row];
+    [ _carts removeObjectAtIndex:fromIndexPath.row];
+    [ _carts insertObject:temp atIndex:toIndexPath.row];
 }
 
 
@@ -209,7 +224,11 @@
     NSString *documentsDirectory = [paths objectAtIndex:0];
     NSString *plistPath = [documentsDirectory stringByAppendingPathComponent:@"carts.plist"];
     
-    [NSKeyedArchiver archiveRootObject:_objects toFile:plistPath];
+    [NSKeyedArchiver archiveRootObject:_carts toFile:plistPath];
+    
+    plistPath = [documentsDirectory stringByAppendingPathComponent:@"items.plist"];
+    
+    [NSKeyedArchiver archiveRootObject:_items toFile:plistPath];
     
     //[[NSDictionary dictionaryWithObjectsAndKeys: _objects,@"task", nil] writeToFile:plistPath atomically:YES];
 }

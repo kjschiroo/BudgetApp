@@ -8,9 +8,7 @@
 
 #import "ItemListViewController.h"
 
-@interface ItemListViewController (){
-    NSMutableArray *_objects;
-}
+@interface ItemListViewController ()
 @end
 
 @implementation ItemListViewController
@@ -35,7 +33,7 @@
     
     UIApplication *app = [UIApplication sharedApplication];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:app];
-    
+/*
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask,YES);
     
@@ -99,6 +97,7 @@
         [_objects insertObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Baby Items", @"Item", [NSNumber numberWithBool:NO], @"Selected", nil] atIndex:0];
         [_objects insertObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Applesauce", @"Item", [NSNumber numberWithBool:NO], @"Selected", nil] atIndex:0];
     }
+ */
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -124,7 +123,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return [_objects count];
+    return [self.allItems count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -133,9 +132,9 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
     NSMutableDictionary *object;
-    NSNumber *isSelected = [_objects[indexPath.row] objectForKey:@"Selected"];
-    object = _objects[indexPath.row];
-    cell.textLabel.text = [object objectForKey: @"Item"];
+    NSNumber *isSelected = [self.allItems[indexPath.row] objectForKey:@"Selected"];
+    object = self.allItems[indexPath.row];
+    cell.textLabel.text = [object objectForKey: @"name"];
     if( [isSelected boolValue])
     {
         [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
@@ -162,7 +161,7 @@
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         // Delete the row from the data source
-        [_objects removeObjectAtIndex:indexPath.row];
+        [self.allItems removeObjectAtIndex:indexPath.row];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     }   
     else if (editingStyle == UITableViewCellEditingStyleInsert) {
@@ -191,14 +190,14 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSNumber *isSelected = [_objects[indexPath.row] objectForKey:@"Selected"];
+    NSNumber *isSelected = [self.allItems[indexPath.row] objectForKey:@"Selected"];
     if([isSelected boolValue])
     {
-        [_objects[indexPath.row] setValue:[NSNumber numberWithBool:NO] forKey:@"Selected"];
+        [self.allItems[indexPath.row] setValue:[NSNumber numberWithBool:NO] forKey:@"Selected"];
     }
     else
     {
-        [_objects[indexPath.row] setValue:[NSNumber numberWithBool:YES] forKey:@"Selected"];
+        [self.allItems[indexPath.row] setValue:[NSNumber numberWithBool:YES] forKey:@"Selected"];
     }
     [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
 }
@@ -209,7 +208,7 @@
     {
         NSNumber *selectedItem;
         NSString *itemName;
-        for( NSMutableDictionary *d in _objects)
+        for( NSMutableDictionary *d in self.allItems)
         {
             selectedItem = [d objectForKey:@"Selected"];
             itemName = [d objectForKey:@"Item"];
@@ -220,12 +219,13 @@
             }
         }
         
-        
+        /*
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         NSString *documentsDirectory = [paths objectAtIndex:0];
         NSString *plistPath = [documentsDirectory stringByAppendingPathComponent:@"itemLibrary.plist"];
         
-        [NSKeyedArchiver archiveRootObject:_objects toFile:plistPath];
+        [NSKeyedArchiver archiveRootObject:self.allItems toFile:plistPath];
+         */
         
     }
 }

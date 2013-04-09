@@ -12,6 +12,7 @@
 - (IBAction)done:(UIStoryboardSegue *)segue;
 - (IBAction)cancel:(UIStoryboardSegue *)segue;
 @property (strong, nonatomic) NSMutableDictionary *cart;
+@property (strong, nonatomic) NSMutableArray *allItems;
 /*
 @property (strong, nonatomic) NSString *name;
 @property (strong, nonatomic) NSMutableArray *objects;

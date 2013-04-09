@@ -126,7 +126,7 @@
                     <navigationItem key="navigationItem" title="Cart Name" id="36">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="oRp-9X-9nU">
                             <connections>
-                                <segue destination="4e9-IU-n8Z" kind="push" identifier="ReturnInput" id="vgc-hg-iof"/>
+                                <segue destination="4e9-IU-n8Z" kind="push" identifier="AddNewItem" id="vgc-hg-iof"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>

@@ -49,7 +49,7 @@
     }
     if(self.item[@"cost"] != nil)
     {
-        self.itemCostInputString.text = [NSString stringWithFormat:@"%@", (NSNumber *)self.item[@"cost"]];
+        self.itemCostInputString.text = [NSString stringWithFormat:@"%@", (NSNumber *)[self.item[@"cost"][0] objectForKey:@"cost"]];
     }  
     if(self.item[@"quantity"] != nil)
     {
@@ -119,7 +119,15 @@
             
             if([ f numberFromString:self.itemCostInputString.text] != nil)
             {
-                self.item[@"cost"] = [ f numberFromString:self.itemCostInputString.text];
+                if(self.item[@"cost"] == nil)
+                {
+                    self.item[@"cost"] = [[NSMutableArray alloc] init];
+                }
+                
+                
+                NSMutableDictionary *temp = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[ f numberFromString:self.itemCostInputString.text], @"cost", [NSDate date], @"date", nil];
+                [self.item[@"cost"] insertObject:temp atIndex:0];
+                //self.item[@"cost"] = [ f numberFromString:self.itemCostInputString.text];
             }
             
             if([ f numberFromString:self.itemQuantityInputString.text] != nil)
@@ -132,6 +140,35 @@
             }
             
             self.item[@"taxed"] = [ NSNumber numberWithBool:[self.itemTaxedInputSwitch isOn]];
+            
+            bool found = false;
+            for(NSMutableDictionary *d in self.allItems)
+            {
+                if([d[@"name"] isEqualToString:self.itemNameInputString.text])
+                {
+                    if( [ f numberFromString:self.itemCostInputString.text] != nil )
+                    {
+                        NSMutableDictionary *temp = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[ f numberFromString:self.itemCostInputString.text], @"cost", [NSDate date], @"date", nil];
+                        [d[@"cost"] insertObject:temp atIndex:0];
+                    }
+                    found = true;
+                    break;
+                }
+            }
+            if(!found)
+            {
+                int i = 0;
+                while(i < [self.allItems count] && [self.allItems[i][@"name"] caseInsensitiveCompare:self.itemNameInputString.text])
+                {
+                    i++;
+                }
+                
+                NSMutableDictionary *temp = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[ f numberFromString:self.itemCostInputString.text], @"cost", [NSDate date], @"date", nil];
+                NSMutableArray *tempList = [[NSMutableArray alloc] init];
+                [tempList insertObject:temp atIndex:0];
+                NSMutableDictionary *item = [[NSMutableDictionary alloc] initWithObjectsAndKeys: self.itemNameInputString.text, @"name", tempList, @"cost", [NSNumber numberWithBool:NO], @"Selected", nil];
+                [self.allItems insertObject:item atIndex:i];
+            }
         }
         
     }

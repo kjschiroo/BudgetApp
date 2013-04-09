@@ -18,5 +18,6 @@
  */
 @property (strong, nonatomic) NSMutableDictionary *item;
 @property (strong,nonatomic) NSNumber *isEdit;
+@property (strong, nonatomic) NSMutableArray *allItems;
 
 @end

@@ -10,4 +10,5 @@
 
 @interface ItemListViewController : UITableViewController
 @property (strong, nonatomic) NSMutableArray* selectedList;
+@property (strong, nonatomic) NSMutableArray* allItems;
 @end
