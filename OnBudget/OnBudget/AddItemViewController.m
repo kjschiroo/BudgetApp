@@ -158,7 +158,7 @@
             if(!found)
             {
                 int i = 0;
-                while(i < [self.allItems count] && [self.allItems[i][@"name"] caseInsensitiveCompare:self.itemNameInputString.text])
+                while(i < [self.allItems count] && [self.allItems[i][@"name"] caseInsensitiveCompare:self.itemNameInputString.text]<0)
                 {
                     i++;
                 }

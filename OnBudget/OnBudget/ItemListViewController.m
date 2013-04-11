@@ -208,13 +208,21 @@
     {
         NSNumber *selectedItem;
         NSString *itemName;
+        NSMutableArray *costs;
         for( NSMutableDictionary *d in self.allItems)
         {
             selectedItem = [d objectForKey:@"Selected"];
-            itemName = [d objectForKey:@"Item"];
             if([selectedItem boolValue] == YES)
             {
-                [self.selectedList insertObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:itemName, @"name", nil] atIndex:[self.selectedList count]];
+                itemName = [d objectForKey:@"name"];
+                costs = [[NSMutableArray alloc] init];
+                int i = 0;
+                for(NSMutableDictionary *c in [d objectForKey:@"cost"])
+                {
+                    [costs insertObject:[NSMutableDictionary dictionaryWithDictionary:c] atIndex:i];
+                    i++;
+                }
+                [self.selectedList insertObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:itemName, @"name",costs, @"cost", nil] atIndex:[self.selectedList count]];
                 [d setValue:[NSNumber numberWithBool:NO] forKey:@"Selected"];
             }
         }
