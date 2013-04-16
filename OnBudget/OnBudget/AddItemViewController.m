@@ -13,6 +13,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *itemCostInputString;
 @property (weak, nonatomic) IBOutlet UISwitch *itemTaxedInputSwitch;
 @property (weak, nonatomic) IBOutlet UITextField *itemNameInputString;
+@property (weak, nonatomic) IBOutlet UIPickerView *prices;
 
 @end
 
@@ -50,7 +51,11 @@
     if(self.item[@"cost"] != nil)
     {
         self.itemCostInputString.text = [NSString stringWithFormat:@"%@", (NSNumber *)[self.item[@"cost"][0] objectForKey:@"cost"]];
-    }  
+        //for(NSMutableDictionary *d in self.item[@"cost"])
+        //{
+        //    self.prices.dataSource = self.item[@"cost"];
+        //}
+    }
     if(self.item[@"quantity"] != nil)
     {
         self.itemQuantityInputString.text = [NSString stringWithFormat:@"%@", (NSNumber *)self.item[@"quantity"]];
@@ -178,28 +183,49 @@
 /*
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
     // Return the number of sections.
-    return 0;
+    return 2;
 }
+ */
 
+/*
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
     // Return the number of rows in the section.
-    return 0;
+    if(section == 1)
+    {
+        int i = [self.item[@"cost"] count];
+        return [self.item[@"cost"] count];
+    }
+    else
+    {
+        return [super tableView:tableView numberOfRowsInSection:section];
+    }
 }
+
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
-    // Configure the cell...
+    // for cells not in section 1, rely on the IB definition of the cell
+    if (indexPath.section != 1)
+        return [super tableView:tableView cellForRowAtIndexPath:indexPath];
     
+    // configure a task status cell for section 1
+    //PreviousCostCell *cell;
+    UITableViewCell *cell;
+    cell = [tableView dequeueReusableCellWithIdentifier:@"myCustomCell"];
+    if (!cell)
+    {
+        // create a cell
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"myCustomCell"];
+    }
+    cell.textLabel.text = [self.item[@"cost"] objectAtIndex:indexPath.row][@"cost"];
     return cell;
+    
 }
-*/
+
+ */
 /*
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
