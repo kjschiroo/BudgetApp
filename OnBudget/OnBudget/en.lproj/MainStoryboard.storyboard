@@ -308,10 +308,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <sections>
-                            <tableViewSection headerTitle="Details" id="yBQ-j4-hIz">
+                            <tableViewSection id="MY3-BP-6pq">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="9CR-5a-l05">
-                                        <rect key="frame" x="0.0" y="22" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -344,7 +344,7 @@
                                         </constraints>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="0mv-me-LLA">
-                                        <rect key="frame" x="0.0" y="66" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="44" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -377,7 +377,7 @@
                                         </constraints>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="tJy-Aw-jlA">
-                                        <rect key="frame" x="0.0" y="110" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="88" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -410,7 +410,7 @@
                                         </constraints>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="dv6-Ej-BvH">
-                                        <rect key="frame" x="0.0" y="154" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="132" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -433,31 +433,6 @@
                                             <constraint firstAttribute="trailing" secondItem="TQM-X7-tBZ" secondAttribute="trailing" constant="20" type="default" id="Ihv-6m-GUO"/>
                                             <constraint firstItem="bzT-q3-Vji" firstAttribute="leading" secondItem="dv6-Ej-BvH" secondAttribute="leading" constant="20" type="user" id="KZJ-VD-2gg"/>
                                             <constraint firstItem="TQM-X7-tBZ" firstAttribute="centerY" secondItem="bzT-q3-Vji" secondAttribute="centerY" type="default" id="sxV-qm-vYa"/>
-                                        </constraints>
-                                    </tableViewCell>
-                                </cells>
-                            </tableViewSection>
-                            <tableViewSection headerTitle="Previous Prices" id="vk4-Mb-Ofj">
-                                <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="218" id="gRa-Yw-2Hw">
-                                        <rect key="frame" x="0.0" y="220" width="320" height="218"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="217"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <pickerView contentMode="scaleToFill" showsSelectionIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nxa-ra-X7P">
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="216" id="5Uh-3r-QuK"/>
-                                                    </constraints>
-                                                </pickerView>
-                                            </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </view>
-                                        <constraints>
-                                            <constraint firstItem="Nxa-ra-X7P" firstAttribute="leading" secondItem="gRa-Yw-2Hw" secondAttribute="leading" type="default" id="0e3-QX-Yic"/>
-                                            <constraint firstItem="Nxa-ra-X7P" firstAttribute="trailing" secondItem="gRa-Yw-2Hw" secondAttribute="trailing" type="default" id="RwC-Sl-Sub"/>
-                                            <constraint firstItem="Nxa-ra-X7P" firstAttribute="top" secondItem="gRa-Yw-2Hw" secondAttribute="top" constant="1" id="epg-Id-oUR"/>
                                         </constraints>
                                     </tableViewCell>
                                 </cells>
@@ -485,7 +460,6 @@
                         <outlet property="itemNameInputString" destination="oUc-wB-7JE" id="jCR-9O-zGF"/>
                         <outlet property="itemQuantityInputString" destination="hTd-eD-NbI" id="LiS-Ur-hXx"/>
                         <outlet property="itemTaxedInputSwitch" destination="TQM-X7-tBZ" id="D9n-6K-opJ"/>
-                        <outlet property="prices" destination="Nxa-ra-X7P" id="O96-fk-r7x"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Prm-Ru-lXc" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -693,6 +667,52 @@
             <point key="canvasLocation" x="999" y="-187"/>
         </scene>
     </scenes>
+    <classes>
+        <class className="AddCartViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/AddCartViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="budgetInput" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="nameInput" candidateClass="UITextField"/>
+            </relationships>
+        </class>
+        <class className="AddItemViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/AddItemViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="itemCostInputString" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="itemNameInputString" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="itemQuantityInputString" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="itemTaxedInputSwitch" candidateClass="UISwitch"/>
+                <relationship kind="outlet" name="prices" candidateClass="UIPickerView"/>
+            </relationships>
+        </class>
+        <class className="EditBudgetViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/EditBudgetViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="BudgetInput" candidateClass="UITextField"/>
+            </relationships>
+        </class>
+        <class className="ItemListViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/ItemListViewController.h"/>
+        </class>
+        <class className="NSLayoutConstraint" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
+        </class>
+        <class className="OnBudgetCartViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/OnBudgetCartViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="cancel:" candidateClass="UIStoryboardSegue"/>
+                <relationship kind="action" name="done:" candidateClass="UIStoryboardSegue"/>
+                <relationship kind="outlet" name="itemLibraryButton" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="topBar" candidateClass="UINavigationItem"/>
+            </relationships>
+        </class>
+        <class className="OnBudgetMasterViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/OnBudgetMasterViewController.h"/>
+        </class>
+        <class className="UIStoryboardSegue" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIStoryboardSegue.h"/>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
