@@ -7,13 +7,14 @@
 //
 
 #import "AddItemViewController.h"
+const int DYNAMICSECTION = 1;
 
 @interface AddItemViewController ()
 @property (weak, nonatomic) IBOutlet UITextField *itemQuantityInputString;
 @property (weak, nonatomic) IBOutlet UITextField *itemCostInputString;
 @property (weak, nonatomic) IBOutlet UISwitch *itemTaxedInputSwitch;
 @property (weak, nonatomic) IBOutlet UITextField *itemNameInputString;
-@property (weak, nonatomic) IBOutlet UIPickerView *prices;
+//@property (weak, nonatomic) IBOutlet UIPickerView *prices;
 
 @end
 
@@ -122,19 +123,6 @@
             [f setNumberStyle:NSNumberFormatterDecimalStyle];
             self.item[@"name"] = self.itemNameInputString.text;
             
-            if([ f numberFromString:self.itemCostInputString.text] != nil)
-            {
-                if(self.item[@"cost"] == nil)
-                {
-                    self.item[@"cost"] = [[NSMutableArray alloc] init];
-                }
-                
-                
-                NSMutableDictionary *temp = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[ f numberFromString:self.itemCostInputString.text], @"cost", [NSDate date], @"date", nil];
-                [self.item[@"cost"] insertObject:temp atIndex:0];
-                //self.item[@"cost"] = [ f numberFromString:self.itemCostInputString.text];
-            }
-            
             if([ f numberFromString:self.itemQuantityInputString.text] != nil)
             {
                 self.item[@"quantity"] = [ f numberFromString:self.itemQuantityInputString.text];
@@ -149,12 +137,14 @@
             bool found = false;
             for(NSMutableDictionary *d in self.allItems)
             {
-                if([d[@"name"] isEqualToString:self.itemNameInputString.text])
+                if([d[@"name"] caseInsensitiveCompare:self.itemNameInputString.text] == 0 )
                 {
                     if( [ f numberFromString:self.itemCostInputString.text] != nil )
                     {
                         NSMutableDictionary *temp = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[ f numberFromString:self.itemCostInputString.text], @"cost", [NSDate date], @"date", nil];
                         [d[@"cost"] insertObject:temp atIndex:0];
+                        //self.item[@"cost"] = [NSMutableDictionary dictionaryWithDictionary:d[@"cost"]];
+                        self.item[@"cost"] = [ d[@"cost"] mutableCopy];
                     }
                     found = true;
                     break;
@@ -162,6 +152,19 @@
             }
             if(!found)
             {
+                if([ f numberFromString:self.itemCostInputString.text] != nil)
+                {
+                    if(self.item[@"cost"] == nil)
+                    {
+                        self.item[@"cost"] = [[NSMutableArray alloc] init];
+                    }
+                    
+                    
+                    NSMutableDictionary *temp = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[ f numberFromString:self.itemCostInputString.text], @"cost", [NSDate date], @"date", nil];
+                    [self.item[@"cost"] insertObject:temp atIndex:0];
+                    //self.item[@"cost"] = [ f numberFromString:self.itemCostInputString.text];
+                }
+                
                 int i = 0;
                 while(i < [self.allItems count] && [self.allItems[i][@"name"] caseInsensitiveCompare:self.itemNameInputString.text]<0)
                 {
@@ -179,105 +182,93 @@
     }
 }
 
-#pragma mark - Table view data source
-/*
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    // Return the number of sections.
-    return 2;
-}
- */
 
-/*
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+//Based in large part on
+//http://stackoverflow.com/questions/10043521/adding-unknown-number-of-rows-to-static-cells-uitableview/10060997#comment15940351_10060997
+-(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Return the number of rows in the section.
-    if(section == 1)
+    if(indexPath.section == DYNAMICSECTION)
     {
-        int i = [self.item[@"cost"] count];
-        return [self.item[@"cost"] count];
+        return YES;
     }
     else
     {
+        return NO;
+    }
+}
+
+-(BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return NO;
+}
+
+-(UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if(indexPath.section == DYNAMICSECTION)
+    {
+        return UITableViewCellEditingStyleDelete;
+    }
+    else
+    {
+        return UITableViewCellEditingStyleNone;
+    }
+}
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == DYNAMICSECTION) {
+        return [super tableView:tableView heightForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+    } else {
+        return [super tableView:tableView heightForRowAtIndexPath:indexPath];
+    }
+}
+
+- (NSInteger)tableView:(UITableView *)tableView indentationLevelForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+    // if dynamic section make all rows the same indentation level as row 0
+    if (indexPath.section == DYNAMICSECTION) {
+        return [super tableView:tableView indentationLevelForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+    } else {
+        return [super tableView:tableView indentationLevelForRowAtIndexPath:indexPath];
+    }
+}
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    if (section == DYNAMICSECTION ) {
+        return [self.item[@"cost"] count];
+    } else {
         return [super tableView:tableView numberOfRowsInSection:section];
     }
 }
 
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+-(UITableViewCell*)tableView:(UITableView*)tableView cellForRowAtIndexPath:(NSIndexPath*)indexPath
 {
     
-    // for cells not in section 1, rely on the IB definition of the cell
-    if (indexPath.section != 1)
+    if (indexPath.section == DYNAMICSECTION) {
+        NSMutableDictionary *costDate = [self.item[@"cost"] objectAtIndex:indexPath.row];
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"OldPriceCell"];
+        
+        if (!cell) {
+            //cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"OldPriceCell"];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"OldPriceCell"];
+        }
+        NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateStyle:NSDateFormatterLongStyle];
+        cell.textLabel.text = [dateFormatter stringFromDate:costDate[@"date"]];
+        cell.textLabel.font = [UIFont systemFontOfSize:17];
+        
+        NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+        [formatter setNumberStyle:NSNumberFormatterCurrencyStyle];
+        cell.detailTextLabel.text = [formatter stringFromNumber:costDate[@"cost"]];
+        
+        
+        return cell;
+    } else {
         return [super tableView:tableView cellForRowAtIndexPath:indexPath];
-    
-    // configure a task status cell for section 1
-    //PreviousCostCell *cell;
-    UITableViewCell *cell;
-    cell = [tableView dequeueReusableCellWithIdentifier:@"myCustomCell"];
-    if (!cell)
-    {
-        // create a cell
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"myCustomCell"];
     }
-    cell.textLabel.text = [self.item[@"cost"] objectAtIndex:indexPath.row][@"cost"];
-    return cell;
-    
 }
 
- */
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
 
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-#pragma mark - Table view delegate
-/*
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Navigation logic may go here. Create and push another view controller.
-    
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     
-}
- */
 
 
 @end
