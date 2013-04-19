@@ -36,6 +36,7 @@ const int DYNAMICSECTION = 1;
     {
         self.item = [[NSMutableDictionary alloc] init];
     }
+    //self.navigationItem.leftBarButtonItem = self.editButtonItem;
     /*
     if(self.itemNameInput != nil && self.itemCostInput != nil && self.itemQuantityInput != nil && self.itemTaxedInput != nil)
     {
@@ -45,17 +46,26 @@ const int DYNAMICSECTION = 1;
         self.itemTaxedInputSwitch.on = [self.itemTaxedInput boolValue];
     }
      */
-    if(self.item[@"name"] != nil)
-    {
-        self.itemNameInputString.text = self.item[@"name"];
-    }
     if(self.item[@"cost"] != nil)
     {
         self.itemCostInputString.text = [NSString stringWithFormat:@"%@", (NSNumber *)[self.item[@"cost"][0] objectForKey:@"cost"]];
+        
         //for(NSMutableDictionary *d in self.item[@"cost"])
         //{
         //    self.prices.dataSource = self.item[@"cost"];
         //}
+    }
+    if(self.item[@"name"] != nil)
+    {
+        self.itemNameInputString.text = self.item[@"name"];
+        for(NSMutableDictionary *d in self.allItems)
+        {
+            if([d[@"name"] caseInsensitiveCompare:self.item[@"name"]] == 0 )
+            {
+                self.item[@"cost"] = [ d[@"cost"] mutableCopy];
+                break;
+            }
+        }
     }
     if(self.item[@"quantity"] != nil)
     {
@@ -268,6 +278,28 @@ const int DYNAMICSECTION = 1;
     }
 }
 
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle == UITableViewCellEditingStyleDelete)
+    {
+            if(indexPath.section == DYNAMICSECTION)
+            {
+                [self.item[@"cost"] removeObjectAtIndex:indexPath.row];
+                for(NSMutableDictionary *d in self.allItems)
+                {
+                    if([d[@"name"] caseInsensitiveCompare:self.itemNameInputString.text] == 0 )
+                    {
+                        [d[@"cost"] removeObjectAtIndex:indexPath.row];
+                        break;
+                    }
+                }
+                [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            }
+        
+    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
+        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
+    }
+}
 
 
 
