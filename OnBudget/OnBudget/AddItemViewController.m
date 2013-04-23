@@ -46,9 +46,9 @@ const int DYNAMICSECTION = 1;
         self.itemTaxedInputSwitch.on = [self.itemTaxedInput boolValue];
     }
      */
-    if(self.item[@"cost"] != nil)
+    if(self.item[@"price"] != nil)
     {
-        self.itemCostInputString.text = [NSString stringWithFormat:@"%@", (NSNumber *)[self.item[@"cost"][0] objectForKey:@"cost"]];
+        self.itemCostInputString.text = [NSString stringWithFormat:@"%@", self.item[@"price"]];
         
         //for(NSMutableDictionary *d in self.item[@"cost"])
         //{
@@ -58,6 +58,10 @@ const int DYNAMICSECTION = 1;
     if(self.item[@"name"] != nil)
     {
         self.itemNameInputString.text = self.item[@"name"];
+        if([self.isEdit boolValue])
+        {
+            self.itemNameInputString.enabled = false;
+        }
         for(NSMutableDictionary *d in self.allItems)
         {
             if([d[@"name"] caseInsensitiveCompare:self.item[@"name"]] == 0 )
@@ -144,22 +148,28 @@ const int DYNAMICSECTION = 1;
             
             self.item[@"taxed"] = [ NSNumber numberWithBool:[self.itemTaxedInputSwitch isOn]];
             
+            
             bool found = false;
-            for(NSMutableDictionary *d in self.allItems)
+            if( [ f numberFromString:self.itemCostInputString.text] != nil )
             {
-                if([d[@"name"] caseInsensitiveCompare:self.itemNameInputString.text] == 0 )
+                for(NSMutableDictionary *d in self.allItems)
                 {
-                    if( [ f numberFromString:self.itemCostInputString.text] != nil )
+                    if([d[@"name"] caseInsensitiveCompare:self.itemNameInputString.text] == 0 )
                     {
+                    
+                    
                         NSMutableDictionary *temp = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[ f numberFromString:self.itemCostInputString.text], @"cost", [NSDate date], @"date", nil];
                         [d[@"cost"] insertObject:temp atIndex:0];
                         //self.item[@"cost"] = [NSMutableDictionary dictionaryWithDictionary:d[@"cost"]];
                         self.item[@"cost"] = [ d[@"cost"] mutableCopy];
+                    
+                        found = true;
+                        break;
                     }
-                    found = true;
-                    break;
                 }
+                self.item[@"price"] = [ f numberFromString:self.itemCostInputString.text];
             }
+            
             if(!found)
             {
                 if([ f numberFromString:self.itemCostInputString.text] != nil)
@@ -298,6 +308,18 @@ const int DYNAMICSECTION = 1;
         
     } else if (editingStyle == UITableViewCellEditingStyleInsert) {
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
+    }
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if(indexPath.section == DYNAMICSECTION)
+    {
+        _itemCostInputString.text = [NSString stringWithFormat:@"%@", self.item[@"cost"][indexPath.row][@"cost"]];
+    }
+    else
+    {
+        //[super tableView:tableView didSelectRowAtIndexPath:indexPath];
     }
 }
 

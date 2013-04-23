@@ -236,6 +236,16 @@
          */
         
     }
+    else
+    {
+        for( NSMutableDictionary *d in self.allItems)
+        {
+            if([[d objectForKey:@"Selected"] boolValue] == YES)
+            {
+                [d setValue:[NSNumber numberWithBool:NO] forKey:@"Selected"];
+            }
+        }
+    }
 }
 
 - (void)applicationDidEnterBackground:(NSNotification *)notification {

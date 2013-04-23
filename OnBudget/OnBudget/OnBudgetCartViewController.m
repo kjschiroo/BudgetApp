@@ -166,7 +166,7 @@
         cell = [tableView dequeueReusableCellWithIdentifier:@"TotalCell" forIndexPath:indexPath];
         double total = 0;
         for (NSMutableDictionary *item in _cart[@"objects"]) {
-            cost = [[item objectForKey:@"cost"][0] objectForKey:@"cost"];
+            cost = item[@"price"];
             quantity = [item objectForKey:@"quantity"];
             total += [cost doubleValue]*[quantity doubleValue];
         }
@@ -216,7 +216,7 @@
     {
         cell = [tableView dequeueReusableCellWithIdentifier:@"ItemCell" forIndexPath:indexPath];
         NSMutableDictionary *item = _cart[@"objects"][indexPath.row];
-        cost = [[item objectForKey:@"cost"][0] objectForKey:@"cost"];
+        cost = item[@"price"];
         quantity = [item objectForKey:@"quantity"];
         cell.textLabel.text = [item objectForKey:@"name"];
         if (quantity != 0 && cost != 0) {
@@ -384,7 +384,7 @@
         taxed = [[item objectForKey:@"taxed"] boolValue];
         if(taxed)
         {
-            cost = [[[item objectForKey:@"cost"][0] objectForKey:@"cost"] doubleValue];
+            cost = [item[@"price"] doubleValue];
             quantity = [[item objectForKey:@"quantity"] doubleValue];
             total += cost*quantity*[_cart[@"tax"] doubleValue];
         }

@@ -44,6 +44,7 @@
     NSString *plistPath = [documentsDirectory stringByAppendingPathComponent:@"carts.plist"];
     
     
+    
     if([fileManager fileExistsAtPath:plistPath] == YES)
     {
         _carts = [NSKeyedUnarchiver unarchiveObjectWithFile:plistPath];
@@ -58,10 +59,11 @@
         _items = [NSKeyedUnarchiver unarchiveObjectWithFile:plistPath];
         [self.tableView reloadData];
     }
-    else
+    if(!_items)
     {
         _items = [[NSMutableArray alloc] init];
     }
+     
      
     
     // Uncomment the following line to preserve selection between presentations.
