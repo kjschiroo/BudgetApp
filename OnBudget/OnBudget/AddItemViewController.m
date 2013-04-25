@@ -152,16 +152,25 @@ const int DYNAMICSECTION = 1;
             bool found = false;
             if( [ f numberFromString:self.itemCostInputString.text] != nil )
             {
+                NSMutableDictionary* costDate;
+                NSDate* myDate;
                 for(NSMutableDictionary *d in self.allItems)
                 {
                     if([d[@"name"] caseInsensitiveCompare:self.itemNameInputString.text] == 0 )
                     {
+                        costDate = [d[@"cost"] objectAtIndex:0];
+                        NSLog(@"%@", d);
+                        myDate = [costDate objectForKey:@"date"];
+                        //[self sameDate:[d[@"cost"] objectAtIndex:0][@"date"] asDate:[NSDate date]];
+                        //if(!(d[@"cost"][0][@"cost"] == [ f numberFromString:self.itemCostInputString.text] &&
+                        //   [self sameDate:d[@"cost"][0][@"date"] as:[NSDate date]]))
+                        //{
                     
-                    
-                        NSMutableDictionary *temp = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[ f numberFromString:self.itemCostInputString.text], @"cost", [NSDate date], @"date", nil];
-                        [d[@"cost"] insertObject:temp atIndex:0];
-                        //self.item[@"cost"] = [NSMutableDictionary dictionaryWithDictionary:d[@"cost"]];
-                        self.item[@"cost"] = [ d[@"cost"] mutableCopy];
+                            NSMutableDictionary *temp = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[ f numberFromString:self.itemCostInputString.text], @"cost", [NSDate date], @"date", nil];
+                            [d[@"cost"] insertObject:temp atIndex:0];
+                            //self.item[@"cost"] = [NSMutableDictionary dictionaryWithDictionary:d[@"cost"]];
+                            self.item[@"cost"] = [ d[@"cost"] mutableCopy];
+                        //}
                     
                         found = true;
                         break;
@@ -254,8 +263,10 @@ const int DYNAMICSECTION = 1;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    
     if (section == DYNAMICSECTION ) {
-        return [self.item[@"cost"] count];
+        return 0;
+        //return [self.item[@"cost"] count];
     } else {
         return [super tableView:tableView numberOfRowsInSection:section];
     }
@@ -281,6 +292,7 @@ const int DYNAMICSECTION = 1;
         [formatter setNumberStyle:NSNumberFormatterCurrencyStyle];
         cell.detailTextLabel.text = [formatter stringFromNumber:costDate[@"cost"]];
         
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
         return cell;
     } else {
@@ -323,6 +335,15 @@ const int DYNAMICSECTION = 1;
     }
 }
 
-
+//Based on
+//http://stackoverflow.com/questions/949416/how-to-compare-two-dates-in-objective-c
+//http://stackoverflow.com/questions/3694867/nsdate-get-year-month-day
+- (BOOL) sameDate:(NSDate*)date1 asDate:(NSDate*)date2
+{
+    NSDateComponents* comp1 = [[NSCalendar currentCalendar] components:NSDayCalendarUnit|NSMonthCalendarUnit|NSYearCalendarUnit fromDate:date1];
+    NSDateComponents* comp2 = [[NSCalendar currentCalendar] components:NSDayCalendarUnit|NSMonthCalendarUnit|NSYearCalendarUnit fromDate:date2];
+ 
+    return [comp1 day] == [comp2 day] && [comp1 month] == [comp2 month] && [comp1 year] == [comp2 year];
+}
 
 @end
