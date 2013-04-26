@@ -44,10 +44,10 @@ const int DYNAMICSECTION = 1;
         self.item = [[NSMutableDictionary alloc] init];
     }
     
-    if(self.item[@"cost"] == nil)
+    if(self.item[@"costList"] == nil)
     {
         //if the cost array isn't allocated we allocate it
-        [self.item setObject:[[NSMutableArray alloc] init] forKey:@"cost"];
+        [self.item setObject:[[NSMutableArray alloc] init] forKey:@"costList"];
     }
     
     if(self.item[@"price"] != nil)
@@ -67,21 +67,23 @@ const int DYNAMICSECTION = 1;
         }
         
         //see if this item happens to already exist in the big list
+        
         for(NSMutableDictionary *d in self.allItems)
         {
             if([d[@"name"] caseInsensitiveCompare:self.item[@"name"]] == 0 )
             {
                 //if it does we will use the big list info
                 int i = 0;
-                [self.item[@"cost"] removeAllObjects];
-                for(NSMutableDictionary* c in d[@"cost"])
+                [[self.item objectForKey:@"costList" ] removeAllObjects];
+                for(NSMutableDictionary* c in d[@"costList"])
                 {
-                    [self.item[@"cost"] insertObject:c atIndex:i];
+                    [[self.item objectForKey:@"costList" ] insertObject:c atIndex:i];
                     i++;
                 }
                 break;
             }
         }
+         
         
     }
     if(self.item[@"quantity"] != nil)
@@ -163,9 +165,11 @@ const int DYNAMICSECTION = 1;
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
+    
     //If the user is trying to return input, and we at least have a name for the item
     if([[segue identifier] isEqualToString:@"ReturnInput"] && ![self.itemNameInputString.text isEqualToString:@""])
     {
+        
         //Create a number formater to get number from text
         NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
         [f setNumberStyle:NSNumberFormatterDecimalStyle];
@@ -202,7 +206,7 @@ const int DYNAMICSECTION = 1;
             NSMutableDictionary *tempCostDate = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[ f numberFromString:self.itemCostInputString.text], @"cost", [NSDate date], @"date", nil];
             
             //Add entry to cost list
-            [self.item[@"cost"] insertObject:tempCostDate atIndex:0];
+            [self.item[@"costList"] insertObject:tempCostDate atIndex:0];
         }
         
         //Now we attempt to locate the object in the library
@@ -230,11 +234,11 @@ const int DYNAMICSECTION = 1;
             
             //Create an entry for our big list
             NSMutableArray *tempList = [[NSMutableArray alloc]init];
-            for(NSMutableDictionary *d in [self.item objectForKey:@"cost"])
+            for(NSMutableDictionary *d in [self.item objectForKey:@"costList"])
             {
                 [tempList insertObject:d atIndex:[tempList count]];
             }
-            NSMutableDictionary* bigListItem = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[self.item objectForKey:@"name"], @"name", tempList, @"cost", [NSNumber numberWithBool:NO], @"Selected", nil];
+            NSMutableDictionary* bigListItem = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[self.item objectForKey:@"name"], @"name", tempList, @"costList", [NSNumber numberWithBool:NO], @"Selected", nil];
             [self.allItems insertObject:bigListItem atIndex:i];
             
             
@@ -243,16 +247,17 @@ const int DYNAMICSECTION = 1;
         {
             //we found the item
             //Clean out everything that was in it
-            [[itemFromList objectForKey:@"cost"] removeAllObjects];
+            [[itemFromList objectForKey:@"costList"] removeAllObjects];
             
             //replace it with what we now have
-            for( NSMutableDictionary *d in [self.item objectForKey:@"cost"])
+            for( NSMutableDictionary *d in [self.item objectForKey:@"costList"])
             {
-                [[itemFromList objectForKey:@"cost"] insertObject:d atIndex:[[itemFromList objectForKey:@"cost"] count]];
+                [[itemFromList objectForKey:@"costList"] insertObject:d atIndex:[[itemFromList objectForKey:@"costList"] count]];
             }
             
         }
     }
+         
 }
 
 
@@ -309,8 +314,9 @@ const int DYNAMICSECTION = 1;
 {
     
     if (section == DYNAMICSECTION ) {
-        return 0;
-        //return [self.item[@"cost"] count];
+        //return 0;
+        int i = [self.item[@"costList"] count];
+        return i;
     } else {
         return [super tableView:tableView numberOfRowsInSection:section];
     }
@@ -320,7 +326,7 @@ const int DYNAMICSECTION = 1;
 {
     
     if (indexPath.section == DYNAMICSECTION) {
-        NSMutableDictionary *costDate = [[self.item objectForKey:@"cost"] objectAtIndex:indexPath.row];
+        NSMutableDictionary *costDate = [[self.item objectForKey:@"costList"] objectAtIndex:indexPath.row];
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"OldPriceCell"];
         
         if (!cell) {
@@ -333,7 +339,7 @@ const int DYNAMICSECTION = 1;
         
         NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
         [formatter setNumberStyle:NSNumberFormatterCurrencyStyle];
-        cell.detailTextLabel.text = [formatter stringFromNumber:[costDate objectForKey:@"cost"]];
+        cell.detailTextLabel.text = [formatter stringFromNumber:[costDate objectForKey:@"costList"]];
         
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
@@ -349,12 +355,12 @@ const int DYNAMICSECTION = 1;
     {
             if(indexPath.section == DYNAMICSECTION)
             {
-                [self.item[@"cost"] removeObjectAtIndex:indexPath.row];
+                [self.item[@"costList"] removeObjectAtIndex:indexPath.row];
                 for(NSMutableDictionary *d in self.allItems)
                 {
                     if([d[@"name"] caseInsensitiveCompare:self.itemNameInputString.text] == 0 )
                     {
-                        [d[@"cost"] removeObjectAtIndex:indexPath.row];
+                        [d[@"costList"] removeObjectAtIndex:indexPath.row];
                         break;
                     }
                 }
@@ -370,7 +376,7 @@ const int DYNAMICSECTION = 1;
 {
     if(indexPath.section == DYNAMICSECTION)
     {
-        _itemCostInputString.text = [NSString stringWithFormat:@"%@", self.item[@"cost"][indexPath.row][@"cost"]];
+        _itemCostInputString.text = [NSString stringWithFormat:@"%@", self.item[@"costList"][indexPath.row][@"cost"]];
     }
     else
     {

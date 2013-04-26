@@ -48,8 +48,12 @@
     if([fileManager fileExistsAtPath:plistPath] == YES)
     {
         _carts = [NSKeyedUnarchiver unarchiveObjectWithFile:plistPath];
-        [self.tableView reloadData];
     }
+    if(!_carts)
+    {
+        _carts = [[NSMutableArray alloc] init];
+    }
+    
     
     plistPath = [documentsDirectory stringByAppendingPathComponent:@"items.plist"];
     
@@ -57,12 +61,13 @@
     if([fileManager fileExistsAtPath:plistPath] == YES)
     {
         _items = [NSKeyedUnarchiver unarchiveObjectWithFile:plistPath];
-        [self.tableView reloadData];
     }
     if(!_items)
     {
         _items = [[NSMutableArray alloc] init];
     }
+    [self.tableView reloadData];
+     
      
      
     
