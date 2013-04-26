@@ -10,11 +10,14 @@
 const int DYNAMICSECTION = 1;
 
 @interface AddItemViewController ()
+{
+    BOOL altered;
+}
 @property (weak, nonatomic) IBOutlet UITextField *itemQuantityInputString;
 @property (weak, nonatomic) IBOutlet UITextField *itemCostInputString;
 @property (weak, nonatomic) IBOutlet UISwitch *itemTaxedInputSwitch;
 @property (weak, nonatomic) IBOutlet UITextField *itemNameInputString;
-//@property (weak, nonatomic) IBOutlet UIPickerView *prices;
+
 
 @end
 
@@ -36,16 +39,7 @@ const int DYNAMICSECTION = 1;
     {
         self.item = [[NSMutableDictionary alloc] init];
     }
-    //self.navigationItem.leftBarButtonItem = self.editButtonItem;
-    /*
-    if(self.itemNameInput != nil && self.itemCostInput != nil && self.itemQuantityInput != nil && self.itemTaxedInput != nil)
-    {
-        self.itemNameInputString.text = self.itemNameInput;
-        self.itemCostInputString.text = [NSString stringWithFormat:@"%.02f", self.itemCostInput.floatValue];
-        self.itemQuantityInputString.text = [NSString stringWithFormat:@"%.02f", self.itemQuantityInput.floatValue];
-        self.itemTaxedInputSwitch.on = [self.itemTaxedInput boolValue];
-    }
-     */
+    altered = false;
     if(self.item[@"price"] != nil)
     {
         self.itemCostInputString.text = [NSString stringWithFormat:@"%@", self.item[@"price"]];
@@ -66,7 +60,13 @@ const int DYNAMICSECTION = 1;
         {
             if([d[@"name"] caseInsensitiveCompare:self.item[@"name"]] == 0 )
             {
-                self.item[@"cost"] = [ d[@"cost"] mutableCopy];
+                int i = 0;
+                [self.item[@"cost"] removeAllObjects];
+                for(NSMutableDictionary* c in d[@"cost"])
+                {
+                    [self.item[@"cost"] insertObject:c atIndex:i];
+                    i++;
+                }
                 break;
             }
         }
@@ -110,13 +110,22 @@ const int DYNAMICSECTION = 1;
         NSString *newString = [textField.text stringByReplacingCharactersInRange:range withString:string];
     
         NSArray *sep = [newString componentsSeparatedByString:@"."];
-        if([sep count] <=2)
+        if([sep count] < 2)
         {
-            if([sep count] ==2)
-            {
-                return [sep[1] length]<=2;
-            }
+            altered = true;
             return YES;
+        }
+        else if([sep count] ==2)
+        {
+            if([sep[1] length]<= 2)
+            {
+                altered = true;
+                return YES;
+            }
+            else
+            {
+                return NO;
+            };
         }
         else
         {
@@ -152,25 +161,26 @@ const int DYNAMICSECTION = 1;
             bool found = false;
             if( [ f numberFromString:self.itemCostInputString.text] != nil )
             {
-                NSMutableDictionary* costDate;
-                NSDate* myDate;
+                //NSMutableDictionary* costDate;
+                //NSDate* myDate;
                 for(NSMutableDictionary *d in self.allItems)
                 {
                     if([d[@"name"] caseInsensitiveCompare:self.itemNameInputString.text] == 0 )
                     {
-                        costDate = [d[@"cost"] objectAtIndex:0];
-                        NSLog(@"%@", d);
-                        myDate = [costDate objectForKey:@"date"];
+                        //costDate = [d[@"cost"] objectAtIndex:0];
+                        //NSLog(@"%@", d);
+                        //myDate = [costDate objectForKey:@"date"];
                         //[self sameDate:[d[@"cost"] objectAtIndex:0][@"date"] asDate:[NSDate date]];
                         //if(!(d[@"cost"][0][@"cost"] == [ f numberFromString:self.itemCostInputString.text] &&
                         //   [self sameDate:d[@"cost"][0][@"date"] as:[NSDate date]]))
-                        //{
+                        if( altered )
+                        {
                     
                             NSMutableDictionary *temp = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[ f numberFromString:self.itemCostInputString.text], @"cost", [NSDate date], @"date", nil];
                             [d[@"cost"] insertObject:temp atIndex:0];
                             //self.item[@"cost"] = [NSMutableDictionary dictionaryWithDictionary:d[@"cost"]];
                             self.item[@"cost"] = [ d[@"cost"] mutableCopy];
-                        //}
+                        }
                     
                         found = true;
                         break;
@@ -265,8 +275,8 @@ const int DYNAMICSECTION = 1;
 {
     
     if (section == DYNAMICSECTION ) {
-        return 0;
-        //return [self.item[@"cost"] count];
+        //return 0;
+        return [self.item[@"cost"] count];
     } else {
         return [super tableView:tableView numberOfRowsInSection:section];
     }
@@ -276,21 +286,20 @@ const int DYNAMICSECTION = 1;
 {
     
     if (indexPath.section == DYNAMICSECTION) {
-        NSMutableDictionary *costDate = [self.item[@"cost"] objectAtIndex:indexPath.row];
+        NSMutableDictionary *costDate = [[self.item objectForKey:@"cost"] objectAtIndex:indexPath.row];
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"OldPriceCell"];
         
         if (!cell) {
-            //cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"OldPriceCell"];
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"OldPriceCell"];
         }
         NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateStyle:NSDateFormatterLongStyle];
-        cell.textLabel.text = [dateFormatter stringFromDate:costDate[@"date"]];
+        cell.textLabel.text = [dateFormatter stringFromDate:[costDate objectForKey:@"date"]];
         cell.textLabel.font = [UIFont systemFontOfSize:17];
         
         NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
         [formatter setNumberStyle:NSNumberFormatterCurrencyStyle];
-        cell.detailTextLabel.text = [formatter stringFromNumber:costDate[@"cost"]];
+        cell.detailTextLabel.text = [formatter stringFromNumber:[costDate objectForKey:@"cost"]];
         
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
@@ -334,7 +343,7 @@ const int DYNAMICSECTION = 1;
         //[super tableView:tableView didSelectRowAtIndexPath:indexPath];
     }
 }
-
+/*
 //Based on
 //http://stackoverflow.com/questions/949416/how-to-compare-two-dates-in-objective-c
 //http://stackoverflow.com/questions/3694867/nsdate-get-year-month-day
@@ -345,5 +354,5 @@ const int DYNAMICSECTION = 1;
  
     return [comp1 day] == [comp2 day] && [comp1 month] == [comp2 month] && [comp1 year] == [comp2 year];
 }
-
+*/
 @end
