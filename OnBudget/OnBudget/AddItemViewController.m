@@ -35,31 +35,43 @@ const int DYNAMICSECTION = 1;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    //At this point nothing has been altered
+    altered = false;
+    
     if(self.item == nil)
     {
+        //if we were not given an item, we give ourselves one
         self.item = [[NSMutableDictionary alloc] init];
     }
-    altered = false;
+    
+    if(self.item[@"cost"] == nil)
+    {
+        //if the cost array isn't allocated we allocate it
+        [self.item setObject:[[NSMutableArray alloc] init] forKey:@"cost"];
+    }
+    
     if(self.item[@"price"] != nil)
     {
+        //if we have a price, write it out
         self.itemCostInputString.text = [NSString stringWithFormat:@"%@", self.item[@"price"]];
-        
-        //for(NSMutableDictionary *d in self.item[@"cost"])
-        //{
-        //    self.prices.dataSource = self.item[@"cost"];
-        //}
     }
     if(self.item[@"name"] != nil)
     {
+        //if we have a name, write it out
         self.itemNameInputString.text = self.item[@"name"];
+        
         if([self.isEdit boolValue])
         {
+            //if the person is editing an existing item, they don't get to change the name
             self.itemNameInputString.enabled = false;
         }
+        
+        //see if this item happens to already exist in the big list
         for(NSMutableDictionary *d in self.allItems)
         {
             if([d[@"name"] caseInsensitiveCompare:self.item[@"name"]] == 0 )
             {
+                //if it does we will use the big list info
                 int i = 0;
                 [self.item[@"cost"] removeAllObjects];
                 for(NSMutableDictionary* c in d[@"cost"])
@@ -70,6 +82,7 @@ const int DYNAMICSECTION = 1;
                 break;
             }
         }
+        
     }
     if(self.item[@"quantity"] != nil)
     {
@@ -103,10 +116,8 @@ const int DYNAMICSECTION = 1;
 //Method drawn largly from
 //http://stackoverflow.com/questions/8076160/limiting-text-field-entry-to-only-one-decimal-point
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
-    NSLog(@"should change characters in range");
-    if(textField == self.itemCostInputString || textField == self.itemQuantityInputString)
+    if(textField == self.itemCostInputString)
     {
-        NSLog(@"In If");
         NSString *newString = [textField.text stringByReplacingCharactersInRange:range withString:string];
     
         NSArray *sep = [newString componentsSeparatedByString:@"."];
@@ -125,7 +136,21 @@ const int DYNAMICSECTION = 1;
             else
             {
                 return NO;
-            };
+            }
+        }
+        else
+        {
+            return NO;
+        }
+    }
+    if(textField == self.itemQuantityInputString)
+    {
+        NSString *newString = [textField.text stringByReplacingCharactersInRange:range withString:string];
+        
+        NSArray *sep = [newString componentsSeparatedByString:@"."];
+        if([sep count] <= 2)
+        {
+            return YES;
         }
         else
         {
@@ -138,86 +163,95 @@ const int DYNAMICSECTION = 1;
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if([[segue identifier] isEqualToString:@"ReturnInput"])
+    //If the user is trying to return input, and we at least have a name for the item
+    if([[segue identifier] isEqualToString:@"ReturnInput"] && ![self.itemNameInputString.text isEqualToString:@""])
     {
-        if(![self.itemNameInputString.text isEqualToString:@""])
+        //Create a number formater to get number from text
+        NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
+        [f setNumberStyle:NSNumberFormatterDecimalStyle];
+        
+        //Start reading in user input
+        self.item[@"name"] = self.itemNameInputString.text;
+        
+        
+        if ([ f numberFromString:self.itemCostInputString.text] != nil)
         {
-            NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
-            [f setNumberStyle:NSNumberFormatterDecimalStyle];
-            self.item[@"name"] = self.itemNameInputString.text;
+            //if the user gave a valid string for price
+            self.item[@"price"] = [ f numberFromString:self.itemCostInputString.text];
+        }
+        
+        if([ f numberFromString:self.itemQuantityInputString.text] != nil)
+        {
+            //if the user gave a valid string quantity
+            self.item[@"quantity"] = [ f numberFromString:self.itemQuantityInputString.text];
+        }
+        else if([ f numberFromString:self.itemCostInputString.text] != nil)
+        {
+            //if the user didn't give us a valid string, but there is a cost
+            //we assume they selected 1 item
+            self.item[@"quantity"] = [NSNumber numberWithInt:1];
+        }
+        
+        
+        self.item[@"taxed"] = [ NSNumber numberWithBool:[self.itemTaxedInputSwitch isOn]];
+        
+        if(altered && [ f numberFromString:self.itemCostInputString.text] != nil)
+        {
+            //if the cost has been changed
+            //Create a temp entry for date and cost
+            NSMutableDictionary *tempCostDate = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[ f numberFromString:self.itemCostInputString.text], @"cost", [NSDate date], @"date", nil];
             
-            if([ f numberFromString:self.itemQuantityInputString.text] != nil)
+            //Add entry to cost list
+            [self.item[@"cost"] insertObject:tempCostDate atIndex:0];
+        }
+        
+        //Now we attempt to locate the object in the library
+        NSMutableDictionary *itemFromList;
+        for(NSMutableDictionary *d in self.allItems)
+        {
+            if([[d objectForKey:@"name"] caseInsensitiveCompare:self.itemNameInputString.text] == 0 )
             {
-                self.item[@"quantity"] = [ f numberFromString:self.itemQuantityInputString.text];
-            }
-            else if([ f numberFromString:self.itemCostInputString.text] != nil)
-            {
-                self.item[@"quantity"] = [NSNumber numberWithInt:1];
-            }
-            
-            self.item[@"taxed"] = [ NSNumber numberWithBool:[self.itemTaxedInputSwitch isOn]];
-            
-            
-            bool found = false;
-            if( [ f numberFromString:self.itemCostInputString.text] != nil )
-            {
-                //NSMutableDictionary* costDate;
-                //NSDate* myDate;
-                for(NSMutableDictionary *d in self.allItems)
-                {
-                    if([d[@"name"] caseInsensitiveCompare:self.itemNameInputString.text] == 0 )
-                    {
-                        //costDate = [d[@"cost"] objectAtIndex:0];
-                        //NSLog(@"%@", d);
-                        //myDate = [costDate objectForKey:@"date"];
-                        //[self sameDate:[d[@"cost"] objectAtIndex:0][@"date"] asDate:[NSDate date]];
-                        //if(!(d[@"cost"][0][@"cost"] == [ f numberFromString:self.itemCostInputString.text] &&
-                        //   [self sameDate:d[@"cost"][0][@"date"] as:[NSDate date]]))
-                        if( altered )
-                        {
-                    
-                            NSMutableDictionary *temp = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[ f numberFromString:self.itemCostInputString.text], @"cost", [NSDate date], @"date", nil];
-                            [d[@"cost"] insertObject:temp atIndex:0];
-                            //self.item[@"cost"] = [NSMutableDictionary dictionaryWithDictionary:d[@"cost"]];
-                            self.item[@"cost"] = [ d[@"cost"] mutableCopy];
-                        }
-                    
-                        found = true;
-                        break;
-                    }
-                }
-                self.item[@"price"] = [ f numberFromString:self.itemCostInputString.text];
-            }
-            
-            if(!found)
-            {
-                if([ f numberFromString:self.itemCostInputString.text] != nil)
-                {
-                    if(self.item[@"cost"] == nil)
-                    {
-                        self.item[@"cost"] = [[NSMutableArray alloc] init];
-                    }
-                    
-                    
-                    NSMutableDictionary *temp = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[ f numberFromString:self.itemCostInputString.text], @"cost", [NSDate date], @"date", nil];
-                    [self.item[@"cost"] insertObject:temp atIndex:0];
-                    //self.item[@"cost"] = [ f numberFromString:self.itemCostInputString.text];
-                }
-                
-                int i = 0;
-                while(i < [self.allItems count] && [self.allItems[i][@"name"] caseInsensitiveCompare:self.itemNameInputString.text]<0)
-                {
-                    i++;
-                }
-                
-                NSMutableDictionary *temp = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[ f numberFromString:self.itemCostInputString.text], @"cost", [NSDate date], @"date", nil];
-                NSMutableArray *tempList = [[NSMutableArray alloc] init];
-                [tempList insertObject:temp atIndex:0];
-                NSMutableDictionary *item = [[NSMutableDictionary alloc] initWithObjectsAndKeys: self.itemNameInputString.text, @"name", tempList, @"cost", [NSNumber numberWithBool:NO], @"Selected", nil];
-                [self.allItems insertObject:item atIndex:i];
+                //They have the same name and are thus the same item
+                itemFromList = d;
+                break;
             }
         }
         
+        
+        if (itemFromList == nil)
+        {
+            //we didn't find the item
+            //Find where our item belongs in the big list
+            int i = 0;
+            while(i < [self.allItems count] && [[[self.allItems objectAtIndex:i] objectForKey:@"name"] caseInsensitiveCompare:self.itemNameInputString.text]<0)
+            {
+                i++;
+            }
+            
+            //Create an entry for our big list
+            NSMutableArray *tempList = [[NSMutableArray alloc]init];
+            for(NSMutableDictionary *d in [self.item objectForKey:@"cost"])
+            {
+                [tempList insertObject:d atIndex:[tempList count]];
+            }
+            NSMutableDictionary* bigListItem = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[self.item objectForKey:@"name"], @"name", tempList, @"cost", [NSNumber numberWithBool:NO], @"Selected", nil];
+            [self.allItems insertObject:bigListItem atIndex:i];
+            
+            
+        }
+        else
+        {
+            //we found the item
+            //Clean out everything that was in it
+            [[itemFromList objectForKey:@"cost"] removeAllObjects];
+            
+            //replace it with what we now have
+            for( NSMutableDictionary *d in [self.item objectForKey:@"cost"])
+            {
+                [[itemFromList objectForKey:@"cost"] insertObject:d atIndex:[[itemFromList objectForKey:@"cost"] count]];
+            }
+            
+        }
     }
 }
 
@@ -275,8 +309,8 @@ const int DYNAMICSECTION = 1;
 {
     
     if (section == DYNAMICSECTION ) {
-        //return 0;
-        return [self.item[@"cost"] count];
+        return 0;
+        //return [self.item[@"cost"] count];
     } else {
         return [super tableView:tableView numberOfRowsInSection:section];
     }
