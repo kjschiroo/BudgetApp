@@ -199,9 +199,27 @@ const int DYNAMICSECTION = 1;
         
         self.item[@"taxed"] = [ NSNumber numberWithBool:[self.itemTaxedInputSwitch isOn]];
         
-        if(altered && [ f numberFromString:self.itemCostInputString.text] != nil)
+        //What is the most recent 
+        NSMutableDictionary* costDate;
+        if([[self.item objectForKey:@"costList"] count] > 0)
         {
-            //if the cost has been changed
+            costDate = [[self.item objectForKey:@"costList"] objectAtIndex:0];
+        }
+        
+        //Determine if we want to add the new cost
+        bool redundant = false;
+        if(costDate != nil && [ f numberFromString:self.itemCostInputString.text] != nil)
+        {
+            //given that we have a first cost and our input works we can consider allowing it to be added
+            bool test = [self sameDate:[costDate objectForKey:@"date"] asDate:[NSDate date]];
+            test = [costDate objectForKey:@"cost"] == [ f numberFromString:self.itemCostInputString.text];
+            redundant = [self sameDate:[costDate objectForKey:@"date"] asDate:[NSDate date]] && ([costDate objectForKey:@"cost"] == [ f numberFromString:self.itemCostInputString.text]);
+        }
+        if(!redundant && [ f numberFromString:self.itemCostInputString.text] != nil)
+        {
+            //the new input is either not the same or occured on a different day as the last
+            //thus we can allow it to be added
+            
             //Create a temp entry for date and cost
             NSMutableDictionary *tempCostDate = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[ f numberFromString:self.itemCostInputString.text], @"cost", [NSDate date], @"date", nil];
             
@@ -339,7 +357,8 @@ const int DYNAMICSECTION = 1;
         
         NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
         [formatter setNumberStyle:NSNumberFormatterCurrencyStyle];
-        cell.detailTextLabel.text = [formatter stringFromNumber:[costDate objectForKey:@"costList"]];
+        NSLog(@"%@",costDate);
+        cell.detailTextLabel.text = [formatter stringFromNumber:[costDate objectForKey:@"cost"]];
         
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
@@ -383,7 +402,7 @@ const int DYNAMICSECTION = 1;
         //[super tableView:tableView didSelectRowAtIndexPath:indexPath];
     }
 }
-/*
+
 //Based on
 //http://stackoverflow.com/questions/949416/how-to-compare-two-dates-in-objective-c
 //http://stackoverflow.com/questions/3694867/nsdate-get-year-month-day
@@ -394,5 +413,5 @@ const int DYNAMICSECTION = 1;
  
     return [comp1 day] == [comp2 day] && [comp1 month] == [comp2 month] && [comp1 year] == [comp2 year];
 }
-*/
+
 @end
