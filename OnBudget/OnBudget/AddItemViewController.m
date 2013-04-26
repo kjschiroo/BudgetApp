@@ -177,6 +177,26 @@ const int DYNAMICSECTION = 1;
         //Start reading in user input
         self.item[@"name"] = self.itemNameInputString.text;
         
+        //Now we attempt to locate the object in the library
+        NSMutableDictionary *itemFromList;
+        for(NSMutableDictionary *d in self.allItems)
+        {
+            if([[d objectForKey:@"name"] caseInsensitiveCompare:self.item[@"name"]] == 0 )
+            {
+                //They have the same name and are thus the same item
+                itemFromList = d;
+                break;
+            }
+        }
+        
+        if(itemFromList != nil && ![self.isEdit boolValue])
+        {
+            //The item already in list and the item we are creating is new
+            for(NSMutableDictionary *d in itemFromList[@"costList"])
+            {
+                [[self.item objectForKey:@"costList"] insertObject:d atIndex:[[self.item objectForKey:@"costList"] count]];
+            }
+        }
         
         if ([ f numberFromString:self.itemCostInputString.text] != nil)
         {
@@ -211,9 +231,10 @@ const int DYNAMICSECTION = 1;
         if(costDate != nil && [ f numberFromString:self.itemCostInputString.text] != nil)
         {
             //given that we have a first cost and our input works we can consider allowing it to be added
-            bool test = [self sameDate:[costDate objectForKey:@"date"] asDate:[NSDate date]];
-            test = [costDate objectForKey:@"cost"] == [ f numberFromString:self.itemCostInputString.text];
-            redundant = [self sameDate:[costDate objectForKey:@"date"] asDate:[NSDate date]] && ([costDate objectForKey:@"cost"] == [ f numberFromString:self.itemCostInputString.text]);
+            bool sameDay = [self sameDate:[costDate objectForKey:@"date"] asDate:[NSDate date]];
+            
+            bool sameCost = [[costDate objectForKey:@"cost"] doubleValue] == [[ f numberFromString:self.itemCostInputString.text] doubleValue];
+            redundant = sameDay && sameCost;
         }
         if(!redundant && [ f numberFromString:self.itemCostInputString.text] != nil)
         {
@@ -225,18 +246,6 @@ const int DYNAMICSECTION = 1;
             
             //Add entry to cost list
             [self.item[@"costList"] insertObject:tempCostDate atIndex:0];
-        }
-        
-        //Now we attempt to locate the object in the library
-        NSMutableDictionary *itemFromList;
-        for(NSMutableDictionary *d in self.allItems)
-        {
-            if([[d objectForKey:@"name"] caseInsensitiveCompare:self.itemNameInputString.text] == 0 )
-            {
-                //They have the same name and are thus the same item
-                itemFromList = d;
-                break;
-            }
         }
         
         
