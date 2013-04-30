@@ -13,11 +13,6 @@
 - (IBAction)cancel:(UIStoryboardSegue *)segue;
 @property (strong, nonatomic) NSMutableDictionary *cart;
 @property (strong, nonatomic) NSMutableArray *allItems;
-/*
-@property (strong, nonatomic) NSString *name;
-@property (strong, nonatomic) NSMutableArray *objects;
-@property (strong, nonatomic) NSNumber *budget;
-@property (strong, nonatomic) NSNumber *taxRate;
- */
+
 
 @end

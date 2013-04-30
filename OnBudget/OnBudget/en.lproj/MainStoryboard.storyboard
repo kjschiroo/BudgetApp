@@ -159,7 +159,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="EwY-Kv-iXo">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="My Cart Name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="EwY-Kv-iXo">
                                                     <constraints>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="97" type="user" id="2K0-Kn-Ujk"/>
                                                     </constraints>
@@ -192,7 +192,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="qfl-6m-LDx">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Amount" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="qfl-6m-LDx">
                                                     <constraints>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="97" type="user" id="AKk-6x-QMj"/>
                                                     </constraints>
@@ -218,6 +218,39 @@
                                             <constraint firstAttribute="trailing" secondItem="qfl-6m-LDx" secondAttribute="trailing" constant="20" type="user" id="v2D-E3-ILb"/>
                                         </constraints>
                                     </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="kKm-wG-GC4">
+                                        <rect key="frame" x="0.0" y="88" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="0.07" clearsOnBeginEditing="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="uDw-7o-zjm">
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="97" type="user" id="iag-7X-l2J"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits" autocapitalizationType="words" keyboardType="decimalPad" returnKeyType="done"/>
+                                                    <connections>
+                                                        <outlet property="delegate" destination="Jfn-Pj-c9T" id="1RO-nz-M5A"/>
+                                                    </connections>
+                                                </textField>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="999" text="Tax Rate" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZL8-I1-8HY">
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                        <constraints>
+                                            <constraint firstItem="ZL8-I1-8HY" firstAttribute="leading" secondItem="kKm-wG-GC4" secondAttribute="leading" constant="20" type="user" id="9eY-Ie-Oe6"/>
+                                            <constraint firstAttribute="trailing" secondItem="uDw-7o-zjm" secondAttribute="trailing" constant="20" type="user" id="Ks1-O0-EJW"/>
+                                            <constraint firstItem="uDw-7o-zjm" firstAttribute="leading" secondItem="ZL8-I1-8HY" secondAttribute="trailing" constant="8" symbolic="YES" type="user" id="O3z-Sk-trG"/>
+                                            <constraint firstItem="uDw-7o-zjm" firstAttribute="centerY" secondItem="kKm-wG-GC4" secondAttribute="centerY" type="user" id="T6d-dd-har"/>
+                                            <constraint firstItem="ZL8-I1-8HY" firstAttribute="top" secondItem="kKm-wG-GC4" secondAttribute="top" constant="11" id="pmw-48-AgK"/>
+                                        </constraints>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                         </sections>
@@ -241,6 +274,7 @@
                     <connections>
                         <outlet property="budgetInput" destination="qfl-6m-LDx" id="HsR-az-uEc"/>
                         <outlet property="nameInput" destination="EwY-Kv-iXo" id="Yzd-xd-aV6"/>
+                        <outlet property="taxRateInput" destination="uDw-7o-zjm" id="JjE-jZ-08b"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2m2-zQ-HRs" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -676,6 +710,7 @@
             <relationships>
                 <relationship kind="outlet" name="budgetInput" candidateClass="UITextField"/>
                 <relationship kind="outlet" name="nameInput" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="taxRateInput" candidateClass="UITextField"/>
             </relationships>
         </class>
         <class className="AddItemViewController" superclassName="UITableViewController">

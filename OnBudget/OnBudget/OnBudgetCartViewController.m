@@ -42,29 +42,6 @@
     self.navigationItem.rightBarButtonItems = @[self.navigationItem.rightBarButtonItem, itemLibraryButton];
     topBar.title = _cart[@"name"];
     
-    /*
-    _budget =[[NSNumber alloc] initWithFloat:0.00];
-    _taxRate = [[NSNumber alloc] initWithFloat:0.065];
-    
-    UIApplication *app = [UIApplication sharedApplication];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:app];
-    
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask,YES);
-    
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString *plistPath = [documentsDirectory stringByAppendingPathComponent:@"items.plist"];
-    
-    
-    if([fileManager fileExistsAtPath:plistPath] == YES)
-    {
-        NSMutableArray *storageBox = [NSKeyedUnarchiver unarchiveObjectWithFile:plistPath];
-        _objects = [storageBox objectAtIndex:0];
-        _budget = [storageBox objectAtIndex:1];
-        [self.tableView reloadData];
-    }
-     */
-    
 }
 
 - (IBAction)goToList:(id)sender
@@ -76,6 +53,7 @@
 {
     if([[segue identifier] isEqualToString:@"ReturnInput"])
     {
+        //If attempting to return input, add item
         AddItemViewController *addController = [segue sourceViewController];
         if(addController.item[@"name"] != nil && ![addController.isEdit boolValue])
         {
@@ -86,6 +64,7 @@
     }
     else if ([[segue identifier] isEqualToString:@"ReturnBudget"])
     {
+        //If returning budget, edit budget and reload.
         EditBudgetViewController *budgetController = [segue sourceViewController];
         _cart[@"budget"] = budgetController.budget;
         [self.tableView reloadData];
@@ -93,6 +72,7 @@
     }
     else if ([[segue identifier] isEqualToString:@"ReturnList"])
     {
+        //if returning a list of items to add, add each item
         ItemListViewController *listController = [segue sourceViewController];
         for(NSMutableDictionary *d in listController.selectedList)
         {
@@ -121,19 +101,17 @@
     {
         _cart[@"objects"] = [[NSMutableArray alloc] init];
     }
+    //Check to see if item is already in list
     for (NSMutableDictionary * pItem in _cart[@"objects"]) {
-        if([[pItem objectForKey:@"name"] isEqualToString:[item objectForKey:@"name"]])
+        if([[pItem objectForKey:@"name"] caseInsensitiveCompare:[item objectForKey:@"name"]] == 0 )
         {
+            //if it is already in the list, we don't want to add it
             return;
         }
     }
     [_cart[@"objects"] insertObject:item atIndex:[_cart[@"objects"] count]];
-    //NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_objects count]-1 inSection:0];
     [self.tableView reloadData];
-    //[self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
-
-#pragma mark - Table View
 
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -153,17 +131,13 @@
     NSNumber *quantity;
     NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     [formatter setNumberStyle:NSNumberFormatterCurrencyStyle];
-    /*if(indexPath.row == 0)
-    {
-        cell = [tableView dequeueReusableCellWithIdentifier:@"BudgetCell" forIndexPath:indexPath];
-        cell.textLabel.text = @"Budget";
-        cell.detailTextLabel.text = [formatter stringFromNumber:_budget];
-        //cell.detailTextLabel.text = [NSString stringWithFormat:@"%.02f", _budget.floatValue];
-    }
-    else*/
+    
     if(indexPath.row == [self rowForTotal])
     {
+        //Row is intended to display total
         cell = [tableView dequeueReusableCellWithIdentifier:@"TotalCell" forIndexPath:indexPath];
+        
+        //sum up the total
         double total = 0;
         for (NSMutableDictionary *item in _cart[@"objects"]) {
             cost = item[@"price"];
@@ -175,6 +149,7 @@
         
         if(displayTotal)
         {
+            //If they have set it to display total
             cell.textLabel.text = @"Total";
             cell.detailTextLabel.text = [formatter stringFromNumber:[NSNumber numberWithDouble:total]];
             cell.detailTextLabel.textColor = [UIColor blackColor];
@@ -183,6 +158,7 @@
         }
         else
         {
+            //If they want to display the balance
             if(total != 0)
             {
                 cell.textLabel.text = @"Balance";
@@ -200,20 +176,21 @@
             {
                 cell.detailTextLabel.textColor = [UIColor blackColor];
             }
-            //cell.detailTextLabel.text = [NSString stringWithFormat:@"%.02f", _budget.floatValue - total];
+            
         }
         
 
     }
     else if(indexPath.row == [self rowForTax])
     {
+        //Display Tax cell
         cell = [tableView dequeueReusableCellWithIdentifier:@"TaxCell" forIndexPath:indexPath];
         cell.textLabel.text = @"Tax";
         cell.detailTextLabel.text = [formatter stringFromNumber:[NSNumber numberWithDouble:[self getTax]]];
-        //cell.detailTextLabel.text = [NSString stringWithFormat:@"%.02f",[self getTax] ];
     }
     else
     {
+        //Otherwise the item must just be an item cell
         cell = [tableView dequeueReusableCellWithIdentifier:@"ItemCell" forIndexPath:indexPath];
         NSMutableDictionary *item = _cart[@"objects"][indexPath.row];
         cost = item[@"price"];
@@ -221,7 +198,6 @@
         cell.textLabel.text = [item objectForKey:@"name"];
         if (quantity != 0 && cost != 0) {
             cell.detailTextLabel.text = [formatter stringFromNumber:[NSNumber numberWithDouble:([cost doubleValue]*[quantity doubleValue])]];
-            //cell.detailTextLabel.text = [NSString stringWithFormat:@"%.02f",[cost doubleValue]*[quantity doubleValue] ];
         }
         else
         {
@@ -233,9 +209,9 @@
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Return NO if you do not want the specified item to be editable.
     if(indexPath.row == [self rowForTotal]|| indexPath.row == [self rowForTax])
     {
+        //The row for total and the row for tax should not be changed
         return NO;
     }
     else

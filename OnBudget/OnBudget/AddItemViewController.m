@@ -120,8 +120,8 @@ const int DYNAMICSECTION = 1;
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
     if(textField == self.itemCostInputString)
     {
+        //Allow the cost to have only one decimal point and two places after it
         NSString *newString = [textField.text stringByReplacingCharactersInRange:range withString:string];
-    
         NSArray *sep = [newString componentsSeparatedByString:@"."];
         if([sep count] < 2)
         {
@@ -147,8 +147,9 @@ const int DYNAMICSECTION = 1;
     }
     if(textField == self.itemQuantityInputString)
     {
+        //Allow the quantity to have only one decimal point
         NSString *newString = [textField.text stringByReplacingCharactersInRange:range withString:string];
-        
+    
         NSArray *sep = [newString componentsSeparatedByString:@"."];
         if([sep count] <= 2)
         {
@@ -292,6 +293,7 @@ const int DYNAMICSECTION = 1;
 //http://stackoverflow.com/questions/10043521/adding-unknown-number-of-rows-to-static-cells-uitableview/10060997#comment15940351_10060997
 -(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    //Costs can be removed
     if(indexPath.section == DYNAMICSECTION)
     {
         return YES;
@@ -311,18 +313,24 @@ const int DYNAMICSECTION = 1;
 {
     if(indexPath.section == DYNAMICSECTION)
     {
+        //costs can be deleted
         return UITableViewCellEditingStyleDelete;
     }
     else
     {
+        //nothing else can be deleted
         return UITableViewCellEditingStyleNone;
     }
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == DYNAMICSECTION) {
+    if (indexPath.section == DYNAMICSECTION)
+    {
+        //the dynamic section should just copy whatever is being done for the first cell
         return [super tableView:tableView heightForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-    } else {
+    }
+    else
+    {
         return [super tableView:tableView heightForRowAtIndexPath:indexPath];
     }
 }
@@ -330,21 +338,26 @@ const int DYNAMICSECTION = 1;
 - (NSInteger)tableView:(UITableView *)tableView indentationLevelForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    // if dynamic section make all rows the same indentation level as row 0
-    if (indexPath.section == DYNAMICSECTION) {
+    //dynamic section makes all rows the same indentation level as row 0
+    if (indexPath.section == DYNAMICSECTION)
+    {
         return [super tableView:tableView indentationLevelForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-    } else {
+    }
+    else
+    {
         return [super tableView:tableView indentationLevelForRowAtIndexPath:indexPath];
     }
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     
-    if (section == DYNAMICSECTION ) {
-        //return 0;
+    if (section == DYNAMICSECTION )
+    {
         int i = [self.item[@"costList"] count];
         return i;
-    } else {
+    }
+    else
+    {
         return [super tableView:tableView numberOfRowsInSection:section];
     }
 }
@@ -353,22 +366,27 @@ const int DYNAMICSECTION = 1;
 {
     
     if (indexPath.section == DYNAMICSECTION) {
+        //Dynamic sections deals only with costs
+        //Get the cost and a cell
         NSMutableDictionary *costDate = [[self.item objectForKey:@"costList"] objectAtIndex:indexPath.row];
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"OldPriceCell"];
         
+        //if we couldn't get an old cell, get a new one
         if (!cell) {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"OldPriceCell"];
         }
+        //set up something to format the date
         NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateStyle:NSDateFormatterLongStyle];
         cell.textLabel.text = [dateFormatter stringFromDate:[costDate objectForKey:@"date"]];
         cell.textLabel.font = [UIFont systemFontOfSize:17];
         
+        //set up something to format the cost
         NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
         [formatter setNumberStyle:NSNumberFormatterCurrencyStyle];
-        NSLog(@"%@",costDate);
         cell.detailTextLabel.text = [formatter stringFromNumber:[costDate objectForKey:@"cost"]];
         
+        //the cell shouldn't change color when selected
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
         return cell;
@@ -381,19 +399,20 @@ const int DYNAMICSECTION = 1;
 {
     if (editingStyle == UITableViewCellEditingStyleDelete)
     {
-            if(indexPath.section == DYNAMICSECTION)
+        //allow deletes for cells in the dynamic section
+        if(indexPath.section == DYNAMICSECTION)
+        {
+            [self.item[@"costList"] removeObjectAtIndex:indexPath.row];
+            for(NSMutableDictionary *d in self.allItems)
             {
-                [self.item[@"costList"] removeObjectAtIndex:indexPath.row];
-                for(NSMutableDictionary *d in self.allItems)
+                if([d[@"name"] caseInsensitiveCompare:self.itemNameInputString.text] == 0 )
                 {
-                    if([d[@"name"] caseInsensitiveCompare:self.itemNameInputString.text] == 0 )
-                    {
-                        [d[@"costList"] removeObjectAtIndex:indexPath.row];
-                        break;
-                    }
+                    [d[@"costList"] removeObjectAtIndex:indexPath.row];
+                    break;
                 }
-                [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
             }
+            [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        }
         
     } else if (editingStyle == UITableViewCellEditingStyleInsert) {
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
@@ -404,14 +423,15 @@ const int DYNAMICSECTION = 1;
 {
     if(indexPath.section == DYNAMICSECTION)
     {
+        //Use the selected cells cost as the cost input
         _itemCostInputString.text = [NSString stringWithFormat:@"%@", self.item[@"costList"][indexPath.row][@"cost"]];
     }
     else
     {
-        //[super tableView:tableView didSelectRowAtIndexPath:indexPath];
     }
 }
 
+//Test to see if two NSDates have the same month, day, and year
 //Based on
 //http://stackoverflow.com/questions/949416/how-to-compare-two-dates-in-objective-c
 //http://stackoverflow.com/questions/3694867/nsdate-get-year-month-day

@@ -19,6 +19,7 @@
 }
 @property (weak, nonatomic) IBOutlet UITextField *nameInput;
 @property (weak, nonatomic) IBOutlet UITextField *budgetInput;
+@property (weak, nonatomic) IBOutlet UITextField *taxRateInput;
 
 
 @end
@@ -41,18 +42,6 @@
     {
         self.cart = [[NSMutableDictionary alloc] init];
     }
-    
-    //location = [[CLLocationManager alloc] init];
-    //location.distanceFilter = kCLDistanceFilterNone;
-    //location.desiredAccuracy = kCLLocationAccuracyHundredMeters;
-    
-    //[location startUpdatingLocation];
-
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
 - (void)didReceiveMemoryWarning
@@ -74,19 +63,41 @@
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
     if(textField == self.budgetInput)
     {
+        //only considering budget input
         NSString *newString = [textField.text stringByReplacingCharactersInRange:range withString:string];
         
         NSArray *sep = [newString componentsSeparatedByString:@"."];
         if([sep count] <=2)
         {
+            //if there is already one decimal point
             if([sep count] ==2)
             {
+                //Make sure there are only two places
                 return [sep[1] length]<=2;
             }
             return YES;
         }
         else
         {
+            //There would be more than one decimal point
+            return NO;
+        }
+    }
+    
+    if(textField == self.taxRateInput)
+    {
+        //Considering only the tax rate input
+        NSString *newString = [textField.text stringByReplacingCharactersInRange:range withString:string];
+        
+        NSArray *sep = [newString componentsSeparatedByString:@"."];
+        if([sep count] <=2)
+        {
+            //if there is already one decimal point
+            return YES;
+        }
+        else
+        {
+            //There would be more than one decimal point
             return NO;
         }
     }
@@ -98,47 +109,36 @@
 {
     if([[segue identifier] isEqualToString:@"ReturnCart"])
     {
+        //The user wants to return a new cart
         if(![self.nameInput.text isEqualToString:@""])
         {
+            //The name has been set
+            
+            //Set up a number formatter to read user input
             NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
             [f setNumberStyle:NSNumberFormatterDecimalStyle];
+            
+            //Set name
             self.cart[@"name"] = self.nameInput.text;
             
+            //Set budget
             if([ f numberFromString:self.budgetInput.text] != nil)
             {
                 self.cart[@"budget"] = [ f numberFromString:self.budgetInput.text];
             }
-            self.cart[@"tax"] = [NSNumber numberWithDouble:0.065];
+            
+            //Set tax rate
+            if([ f numberFromString:self.taxRateInput.text] != nil)
+            {
+                self.cart[@"tax"] = [ f numberFromString:self.taxRateInput.text];
+            }
+            
+            //Initialize objects array
             self.cart[@"objects"] = [[NSMutableArray alloc] init];
         }
         
     }
 }
 
-/*
--(double) taxRateFromLocation
-{
-
-    NSString *state;
-    CLGeocoder *rGeocoder = [[CLGeocoder alloc] init];
-    CLGeocoder *geocoder = [[[CLGeocoder alloc] init] autorelease];
-    
-    CLLocationCoordinate2D coord = (_selectedRow == 0) ? kSanFranciscoCoordinate : _currentUserCoordinate;
-    CLLocation *location = [[[CLLocation alloc] initWithLatitude:coord.latitude longitude:coord.longitude] autorelease];
-    if(rGeocoder)
-    {
-        [rGeocoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
-            NSLog(@"reverseGeocodeLocation:completionHandler: Completion Handler called!");
-            if (error){
-                NSLog(@"Geocode failed with error: %@", error);
-                return;
-            }
-            NSLog(@"Received placemarks: %@", placemarks);
-            //[self displayPlacemarks:placemarks];
-        }];
-    }
-    return 0;
-}
- */
 
 @end
