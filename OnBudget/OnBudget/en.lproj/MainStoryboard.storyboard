@@ -152,7 +152,7 @@
                         <sections>
                             <tableViewSection id="SIN-zy-gzx">
                                 <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="ael-dc-yca">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="ael-dc-yca">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -178,14 +178,14 @@
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                         <constraints>
-                                            <constraint firstItem="8nd-e7-GP8" firstAttribute="leading" secondItem="ael-dc-yca" secondAttribute="leading" constant="20" type="user" id="3gL-sB-RRi"/>
-                                            <constraint firstAttribute="trailing" secondItem="EwY-Kv-iXo" secondAttribute="trailing" constant="20" type="user" id="LNy-Xi-dGy"/>
-                                            <constraint firstItem="8nd-e7-GP8" firstAttribute="top" secondItem="ael-dc-yca" secondAttribute="top" constant="11" id="Uwr-EQ-RZR"/>
+                                            <constraint firstItem="8nd-e7-GP8" firstAttribute="centerY" secondItem="ael-dc-yca" secondAttribute="centerY" type="default" id="2ti-lT-H25"/>
+                                            <constraint firstItem="8nd-e7-GP8" firstAttribute="leading" secondItem="ael-dc-yca" secondAttribute="leading" constant="20" type="default" id="Jtt-Sl-bcI"/>
                                             <constraint firstItem="EwY-Kv-iXo" firstAttribute="leading" secondItem="8nd-e7-GP8" secondAttribute="trailing" constant="8" symbolic="YES" type="user" id="dIh-Fk-mFC"/>
+                                            <constraint firstAttribute="trailing" secondItem="EwY-Kv-iXo" secondAttribute="trailing" constant="20" type="default" id="eLN-7a-7kZ"/>
                                             <constraint firstItem="EwY-Kv-iXo" firstAttribute="centerY" secondItem="ael-dc-yca" secondAttribute="centerY" type="user" id="gE8-cg-Ypz"/>
                                         </constraints>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="Rnz-NW-2UO">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="Rnz-NW-2UO">
                                         <rect key="frame" x="0.0" y="44" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -213,12 +213,12 @@
                                         <constraints>
                                             <constraint firstItem="qfl-6m-LDx" firstAttribute="leading" secondItem="EQe-US-evg" secondAttribute="trailing" constant="8" symbolic="YES" type="user" id="OJQ-jp-p5a"/>
                                             <constraint firstItem="EQe-US-evg" firstAttribute="top" secondItem="Rnz-NW-2UO" secondAttribute="top" constant="11" id="Rgk-qC-aNE"/>
-                                            <constraint firstItem="EQe-US-evg" firstAttribute="leading" secondItem="Rnz-NW-2UO" secondAttribute="leading" constant="20" type="user" id="d6g-vN-Oxn"/>
                                             <constraint firstItem="qfl-6m-LDx" firstAttribute="centerY" secondItem="Rnz-NW-2UO" secondAttribute="centerY" type="user" id="hZt-Ur-dcj"/>
-                                            <constraint firstAttribute="trailing" secondItem="qfl-6m-LDx" secondAttribute="trailing" constant="20" type="user" id="v2D-E3-ILb"/>
+                                            <constraint firstAttribute="trailing" secondItem="qfl-6m-LDx" secondAttribute="trailing" constant="20" type="default" id="oG1-b6-0Hi"/>
+                                            <constraint firstItem="EQe-US-evg" firstAttribute="leading" secondItem="Rnz-NW-2UO" secondAttribute="leading" constant="20" type="default" id="vHS-2A-qB1"/>
                                         </constraints>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="kKm-wG-GC4">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="kKm-wG-GC4">
                                         <rect key="frame" x="0.0" y="88" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -244,11 +244,11 @@
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                         <constraints>
-                                            <constraint firstItem="ZL8-I1-8HY" firstAttribute="leading" secondItem="kKm-wG-GC4" secondAttribute="leading" constant="20" type="user" id="9eY-Ie-Oe6"/>
-                                            <constraint firstAttribute="trailing" secondItem="uDw-7o-zjm" secondAttribute="trailing" constant="20" type="user" id="Ks1-O0-EJW"/>
+                                            <constraint firstAttribute="trailing" secondItem="uDw-7o-zjm" secondAttribute="trailing" constant="20" type="default" id="LPv-cL-hnD"/>
                                             <constraint firstItem="uDw-7o-zjm" firstAttribute="leading" secondItem="ZL8-I1-8HY" secondAttribute="trailing" constant="8" symbolic="YES" type="user" id="O3z-Sk-trG"/>
                                             <constraint firstItem="uDw-7o-zjm" firstAttribute="centerY" secondItem="kKm-wG-GC4" secondAttribute="centerY" type="user" id="T6d-dd-har"/>
                                             <constraint firstItem="ZL8-I1-8HY" firstAttribute="top" secondItem="kKm-wG-GC4" secondAttribute="top" constant="11" id="pmw-48-AgK"/>
+                                            <constraint firstItem="ZL8-I1-8HY" firstAttribute="leading" secondItem="kKm-wG-GC4" secondAttribute="leading" constant="20" type="default" id="wMR-jb-mfI"/>
                                         </constraints>
                                     </tableViewCell>
                                 </cells>

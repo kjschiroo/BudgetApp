@@ -102,14 +102,22 @@
         _cart[@"objects"] = [[NSMutableArray alloc] init];
     }
     //Check to see if item is already in list
+    int i = 0;
+    int result;
     for (NSMutableDictionary * pItem in _cart[@"objects"]) {
-        if([[pItem objectForKey:@"name"] caseInsensitiveCompare:[item objectForKey:@"name"]] == 0 )
+        result = [[pItem objectForKey:@"name"] caseInsensitiveCompare:[item objectForKey:@"name"]];
+        if(result == 0 )
         {
             //if it is already in the list, we don't want to add it
             return;
         }
+        else if (result < 0)
+        {
+            i++;
+        }
     }
-    [_cart[@"objects"] insertObject:item atIndex:[_cart[@"objects"] count]];
+    //[_cart[@"objects"] insertObject:item atIndex:[_cart[@"objects"] count]];
+    [_cart[@"objects"] insertObject:item atIndex:i];
     [self.tableView reloadData];
 }
 
